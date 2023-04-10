@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Dish;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-
-class IndexRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +23,12 @@ class IndexRequest extends FormRequest
     {
         return [
             'name' =>'string|max:191',
+            'image'=>'file',
+            'composition' =>'max:250',
+            'calories' => 'numeric',
+            'cost' => 'numeric',
+            'category_id' => 'numeric',
         ];
     }
 }
+

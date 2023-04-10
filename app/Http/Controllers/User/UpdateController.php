@@ -12,6 +12,7 @@ use App\Models\User;
 class UpdateController extends Controller
 {
     public function __invoke(UpdateRequest $request, int $id){
+        $this->authorize('view',auth()->user());
         $validator = $request->validated();
         $user = User::find($id);
         if ($user)

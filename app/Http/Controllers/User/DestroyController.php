@@ -11,6 +11,7 @@ use App\Models\User;
 class DestroyController extends Controller
 {
     public function __invoke($id){
+        $this->authorize('delete',auth()->user());
         $user = User::find($id);
         if ($user){
             $user->delete();
@@ -27,6 +28,4 @@ class DestroyController extends Controller
             ],404);
         }
     }
-
-
 }

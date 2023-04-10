@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -29,34 +29,50 @@ class AuthController extends Controller
 
             $validatedData = $request->validated();
             //Email
-            $user = User::where('email',$validatedData['email'])->first();
-            // Password
-            if (!$user|| !Hash::check($validatedData['password'], $user->password))
-            {
-                return response([
-                    'message'=>'Неправильный логин или пароль'
-                ],401);
+
+            if (isset($validatedData['email'])&&isset($validatedData['password'])){
+                $user = User::where('email',$validatedData['email'])->first();
+                // Password
+                if ($user&& Hash::check($validatedData['password'], $user->password))
+                {
+                    $token = $user->createToken('auth_token')->plainTextToken;
+                    return response()->json([
+                        'access_token' => $token,
+                        'token_type' => 'Bearer',
+                    ]);
+                }
+                else{
+                    return response([
+                        'message'=>'Неправильный логин или пароль'
+                    ],401);
+                }
             }
-            $token = $user->createToken('auth_token')->plainTextToken;
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
-       /*     if (!Auth::attempt($request->only('email','password'))){
-            return response()->json([
-                'status'=> 401,
-                'message'=> 'Неверные данные для входа'
-            ],401);
-        }
-        $user =User::where('email',$request['email'])->firstOrFail();*/
+            //pincode
+            elseif (isset($validatedData['pin_code'])){
+                $user = User::where('pin_code',$validatedData['pin_code'])->first();
+                if (User::where('pin_code',$validatedData['pin_code'])->first()){
+                    $token = $user->createToken('auth_token')->plainTextToken;
+                    return response()->json([
+                        'access_token' => $token,
+                        'token_type' => 'Bearer',
+                    ]);
+                }
+                else{
+                    return response([
+                        'message'=>'Неправильный Пинкод'
+                    ],401);
+                }
+
+            }
 
         }
 
-public function logout(){
-    auth()->user()->tokens()->delete();
-    return response([
-        'message' => 'Авторизация завершена'
-    ],401);
+
+        public function logout(){
+             auth()->user()->tokens()->delete();
+            return response([
+                   'message' => 'Авторизация завершена'
+             ],401);
 }
 
     public function forgotPassword(Request $request){

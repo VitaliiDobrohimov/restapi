@@ -13,6 +13,7 @@ use App\Models\User;
 class ShowController extends Controller
 {
     public function __invoke($id){
+        $this->authorize('view',auth()->user());
         $user = User::find($id);
         if ($user){
             return response()->json([

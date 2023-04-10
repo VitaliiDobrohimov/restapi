@@ -11,11 +11,15 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Filters\UserFilter;
 use App\Models\Traits;
 use App\Models\CollectionList as ModelsCollectionList;
+use App\Policies\UserPolicy;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class IndexController extends Controller
 {
     public function __invoke(IndexRequest $request)
     {
+
+        $this->authorize('view',auth()->user());
         $data = $request->validated();
         $filter = app()->make(UserFilter::class,['queryParams'=>array_filter($data)]);
         $data = User::filter($filter);
@@ -23,6 +27,8 @@ class IndexController extends Controller
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
             return User::filter($filter)->get() ;
+
+
         /*if ($request['orderBy'] == 'name')
         {
             if ($request['sort'] == 'desc'){
