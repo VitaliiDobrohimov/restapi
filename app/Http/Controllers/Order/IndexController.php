@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Order;
 
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Requests\UserRequest;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Filters\UserFilter;
@@ -17,17 +16,16 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class IndexController extends Controller
 {
-    public function __invoke(IndexRequest $request)
+    public function __invoke(Request $request)
     {
-
         $this->authorize('view',auth()->user());
         $data = $request->validated();
-        $filter = app()->make(UserFilter::class,['queryParams'=>array_filter($data)]);
-        $data = User::filter($filter);
+        $filter = app()->make(OrderFilter::class,['queryParams'=>array_filter($data)]);
+        $data = Order::filter($filter);
         if (isset($data['orderBy'])&&isset($data['sort'])){
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
-            return User::filter($filter)->get() ;
+            return Order::filter($filter)->get() ;
 
 
         /*if ($request['orderBy'] == 'name')

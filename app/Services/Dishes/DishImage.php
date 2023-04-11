@@ -16,12 +16,15 @@ class DishImage extends Controller
 
     public function update($validator,$dish)
     {
-        $validator['image'] = Storage::put('/DishesImage',$validator['image']);
+
+       // $validator['image'] = Storage::put('/DishesImage',$validator['image']);
         Storage::delete($dish['image']);
     }
 
-    public function destroy($dish)
+    public function destroy($data)
     {
-        Storage::delete($dish['image']);
+
+        Storage::delete($data['image']);
+
     }
 }

@@ -23,13 +23,16 @@ class UpdateController extends BaseController
         $category = Category::find($id);
         if ($category)
         {
-            $this->service->update($validator,$category);
-            $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
+            if (isset($validator['image']))
+            {
+                $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
+                $this->service->update($validator,$category);
+            }
             $category->update($validator);
-
             return response()->json([
                 'status' => 200,
-                'message' => "Категория успешно обновлена"
+                'message' => "Категория успешно обновлена",
+                'data'=>$category
             ],200);
         }else{
             return response()->json([

@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Category;
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\Filters\UserFilter;
 use App\Http\Requests\Category\StoreRequest;
-use App\Models\categories;
 use App\Models\Category;
-use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -19,8 +15,8 @@ class StoreController extends BaseController
     public function __invoke(StoreRequest $request){
         $this->authorize('create',auth()->user());
         $validator = $request->validated();
-        $this->service->store($validator);
-
+        $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
+        //$this->service->store($validator['image']);
         $category = Category::create($validator);
         if ($category){
             return response()->json([

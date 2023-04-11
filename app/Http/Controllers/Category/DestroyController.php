@@ -15,9 +15,11 @@ class DestroyController extends BaseController
      */
     public function __invoke($id){
         $this->authorize('delete',auth()->user());
-        $category = Category::find($id);
-        $this->service->destroy($category);
+        $category = Category::findOrFail($id);
+
         if ($category){
+            if (isset($category['image']))
+                $this->service->destroy($category);
             $category->delete();
             return response()->json([
                 'status' => 200,

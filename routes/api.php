@@ -38,7 +38,6 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
     });
 
 
-
     Route::group(['namespace'=>'App\Http\Controllers\Category'],function (){
         Route::get('/categories','IndexController');
         Route::post('/categories', 'StoreController');
@@ -57,9 +56,16 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::put('/dishes/{id}/update', 'UpdateController');
         Route::delete('/dishes/{id}/delete', 'DestroyController');
     });
+
+    Route::group(['namespace'=>'App\Http\Controllers\Order'],function (){
+        Route::get('/orders','IndexController');
+        Route::post('/orders', 'StoreController');
+        Route::get('/orders/{id}', 'ShowController');
+        Route::get('/orders/{id}/edit', 'EditController');
+        Route::put('/orders/{id}/update', 'UpdateController');
+        Route::delete('/orders/{id}/delete', 'DestroyController');
+    });
 });
-
-
 
 Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
 //Route::post('/reset-password',[AuthController::class,'ResetPassword'])->name('password.reset');

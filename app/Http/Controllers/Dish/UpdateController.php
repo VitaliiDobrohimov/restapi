@@ -16,10 +16,13 @@ class UpdateController extends BaseController
     public function __invoke (UpdateRequest $request, int $id){
         $this->authorize('view',auth()->user());
         $validator = $request->validated();
-        $dish = Dish::find($id);
+        $dish = Dish::findOrFail($id);
         if ($dish)
         {
-            $this->service->update($validator,$dish);
+            if(isset($validator['image'])){
+                $validator['image'] = Storage::put('/DishesImage',$validator['image']);
+                $this->service->update($validator,$dish);
+            }
             $dish->update($validator);
 
             return response()->json([

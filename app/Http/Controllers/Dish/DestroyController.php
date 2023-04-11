@@ -14,10 +14,11 @@ class DestroyController extends BaseController
      * Display a listing of the resource.
      */
     public function __invoke($id){
+
         $this->authorize('delete',auth()->user());
         $data = Dish::find($id);
-        $this->service->destroy($data);
         if ($data){
+            $this->service->destroy($data);
             $data->delete();
             return response()->json([
                 'status' => 200,
@@ -33,6 +34,4 @@ class DestroyController extends BaseController
         }
 
     }
-
-
 }

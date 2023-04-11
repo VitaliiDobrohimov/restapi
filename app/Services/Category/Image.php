@@ -5,6 +5,9 @@ namespace App\Services\Category;
 use App\Models\Category;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Filters\UserFilter;
+use App\Http\Requests\Category\StoreRequest;
+use App\Models\User;
 
 class Image extends Controller
 {
@@ -16,12 +19,13 @@ class Image extends Controller
 
     public function update($validator,$category)
     {
-        $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
+       // $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
         Storage::delete($category['image']);
     }
 
     public function destroy($category)
     {
+       // Storage::path('storage/app/CategoryImage');
         Storage::delete($category['image']);
     }
 }

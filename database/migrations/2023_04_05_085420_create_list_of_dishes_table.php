@@ -22,8 +22,8 @@ return new class extends Migration
             $table->index('dishes_id','dishes_list_of_dishes_idx');
 
             //FX
-            $table->foreign('orders_id','orders_list_of_dishes_fk')->on('orders')->references('id');
-            $table->foreign('dishes_id','dishes_list_of_dishes_fk')->on('dishes')->references('id');
+            $table->foreign('orders_id','orders_list_of_dishes_fk')->on('orders')->references('id')->cascadeOnDelete();;
+            $table->foreign('dishes_id','dishes_list_of_dishes_fk')->on('dishes')->references('id')->cascadeOnDelete();;
 
         });
     }

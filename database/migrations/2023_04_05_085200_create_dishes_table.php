@@ -24,7 +24,7 @@ return new class extends Migration
             //IDX
             $table->index('category_id','dishes_categories_idx');
             //FX
-            $table->foreign('category_id','dishes_categories_fk')->on('categories')->references('id');
+            $table->foreign('category_id','dishes_categories_fk')->on('categories')->references('id')->cascadeOnDelete();;
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -15,4 +16,8 @@ class Category extends Model
         'name',
         'image'
     ];
+    public function dishes(): HasMany
+    {
+        return $this->hasMany(Dish::class, 'category_id', 'id');
+    }
 }

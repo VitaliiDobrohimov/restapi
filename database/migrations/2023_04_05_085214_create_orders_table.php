@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedSmallInteger('number')->unique();
             $table->unsignedSmallInteger('count');
+          //  $table->unsignedSmallInteger('dishes_id');
             $table->unsignedSmallInteger('total_cost');
             $table->dateTime('date_closed');
             $table->unsignedSmallInteger('waiter_id');
@@ -23,9 +24,12 @@ return new class extends Migration
             $table->timestamps();
             //IDX
             $table->index('waiter_id','orders_users_idx');
+         //   $table->index('dishes_id','orders_list_of_dishes_idx');
+
 
             //FX
-            $table->foreign('waiter_id','orders_users_fk')->on('users')->references('id');
+            $table->foreign('waiter_id','orders_users_fk')->on('users')->references('id')->cascadeOnDelete();;
+          //  $table->foreign('dishes_id','orders_list_of_dishes_fk')->on('list_of_dishes')->references('id');
 
 
         });

@@ -14,4 +14,5 @@ class List_of_dishes extends Model
         'count',
         'dishes_id'
     ];
+
 }

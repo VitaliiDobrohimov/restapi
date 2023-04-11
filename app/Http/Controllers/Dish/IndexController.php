@@ -23,8 +23,17 @@ class IndexController extends Controller
         $filter = app()->make(DishesFilter::class,['queryParams'=>array_filter($data)]);
         $data = Dish::filter($filter);
         if (isset($request['orderBy'])&&isset($request['sort'])){
-            return $filter->orderBy($request['orderBy'],$request['sort'])->get();
+            return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
+    /*
+        if (isset($request['cost'])&&isset($request['sort']))
+        {
+            return $data->orderBy($request['cost']);
+        }
+        if (isset($request['calories'])&&isset($request['sort']))
+        {
+            return $data->orderBy($request['calories'],$request['sort']);
+        }*/
         return Dish::filter($filter)->get();
 
 

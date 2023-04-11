@@ -6,6 +6,7 @@ use App\Http\Controllers\Dish\BaseController;
 use App\Http\Requests\Dish\StoreRequest;
 
 use App\Models\Dish;
+use Illuminate\Support\Facades\Storage;
 
 
 class StoreController extends BaseController
@@ -16,7 +17,8 @@ class StoreController extends BaseController
     public function __invoke(StoreRequest $request){
         $this->authorize('create',auth()->user());
         $validator = $request->validated();
-        $this->service->store($validator);
+        $validator['image'] = Storage::put('/DishesImage',$validator['image']);
+      //  $this->service->store($validator);
         $dish = Dish::create($validator);
         if ($dish){
             return response()->json([
