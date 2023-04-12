@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedSmallInteger('pin_code')->unique();
-            $table-> unsignedBigInteger('role_id')->nullable();
+            $table->foreignId('role_id')->nullable();
             $table->timestamps();
 
 

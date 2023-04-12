@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('list_of_dishes', function (Blueprint $table) {
             $table->id();
             $table->unsignedSmallInteger('count');
-            $table->unsignedSmallInteger('orders_id');
-            $table->unsignedSmallInteger('dishes_id');
+            $table->foreignId('orders_id');
+            $table->foreignId('dishes_id');
             $table->timestamps();
             //IDX
             $table->index('orders_id','orders_list_of_dishes_idx');

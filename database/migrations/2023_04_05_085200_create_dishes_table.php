@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('image');
             $table->text('composition');
-            $table->unsignedSmallInteger('calories');
-            $table->unsignedMediumInteger('cost');
-            $table-> unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('calories');
+            $table->unsignedBigInteger('cost');
+            $table->foreignId('category_id')->nullable();
             $table->timestamps();
 
             //IDX

@@ -16,15 +16,16 @@ class StoreController extends Controller
         $this->authorize('create',auth()->user());
         $validator = $request->validated();
         $order = Order::create($validator);
+        $order->dishes()->attach();
         if ($order){
             return response()->json([
                 'status' => 200,
-                'message' => "Пользователь успешно создан"
+                'message' => "Заказ успешно создан"
             ],200);
         }else{
             return response()->json([
                 'status' => 500,
-                'message' => 'Ошибка создания пользователя'
+                'message' => 'Ошибка создания заказа'
             ],500);
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -10,7 +9,7 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserController>
  */
-class RoleFactory extends Factory
+class OrderFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,10 +19,13 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-                'name'=>'superAdmin',
-                'created_at'=> now(),
-                'updated_at'=> now(),
-
+            'number' => fake()->unique()->numberBetween(1,1000),
+            'count' => fake()->numberBetween(1,5),
+            'total_cost' => fake()->numberBetween(1,6545),
+            'date_closed' => null,
+            'waiter_id' => fake()->numberBetween(1,3),
+            'created_at'=>now(),
+            'updated_at'=>now(),
         ];
     }
 

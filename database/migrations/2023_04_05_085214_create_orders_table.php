@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('count');
           //  $table->unsignedSmallInteger('dishes_id');
             $table->unsignedSmallInteger('total_cost');
-            $table->dateTime('date_closed');
+            $table->dateTime('date_closed')->nullable();
             $table->unsignedSmallInteger('waiter_id');
             //$table->unsignedSmallInteger('list_of_dishes_id');
 
