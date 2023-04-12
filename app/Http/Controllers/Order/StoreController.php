@@ -17,6 +17,7 @@ class StoreController extends Controller
         $validator = $request->validated();
         $order = Order::create($validator);
         $order->dishes()->attach();
+
         if ($order){
             return response()->json([
                 'status' => 200,

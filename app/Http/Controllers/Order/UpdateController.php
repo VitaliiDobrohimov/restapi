@@ -15,10 +15,9 @@ class UpdateController extends Controller
     public function __invoke(UpdateRequest $request, int $id){
         $this->authorize('view',auth()->user());
         $validator = $request->validated();
-        $order = Order::find($id);
+        $order = Order::findOrFail($id);
         if ($order)
         {
-
             $order->update($validator);
             return response()->json([
                 'status' => 200,

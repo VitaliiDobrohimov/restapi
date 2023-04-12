@@ -24,12 +24,12 @@ class OrderFilter extends AbstractFilter
 
     public function number(Builder $builder, $value)
     {
-        $builder->where('number', 'like', "%{$value}%");
+        $builder->where('number', 'like', $value);
     }
 
     public function total_cost(Builder $builder, $value)
     {
-        $builder->where('total_cost', 'like', "%{$value}%");
+        $builder->where('total_cost', 'like', $value);
     }
 
     public function date_closed(Builder $builder, $value)

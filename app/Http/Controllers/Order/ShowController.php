@@ -15,11 +15,12 @@ class ShowController extends Controller
 {
     public function __invoke($id){
         $this->authorize('view',auth()->user());
-        $order = Order::find($id);
+        $order = Order::findOrFail($id);
         if ($order){
             return response()->json([
                 'status' => 200,
-                'user' => $order,
+                'order' => $order,
+                'user'=> $order->user
             ],200);
         }
         else{

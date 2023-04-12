@@ -15,15 +15,15 @@ class IndexController extends Controller
     {
         $this->authorize('view',auth()->user());
         $data = $request->validated();
-        $dish = Order::find(4);
-        dd($dish->dishes);
+
         $filter = app()->make(OrderFilter::class,['queryParams'=>array_filter($data)]);
+
         $data = Order::filter($filter);
-        if (isset($data['orderBy'])&&isset($data['sort'])){
+
+        if (isset($request['orderBy'])&&isset($request['sort'])){
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
-
-            return Order::filter($filter)->get();
+        return Order::filter($filter)->get();
 
 
         /*if ($request['orderBy'] == 'name')
