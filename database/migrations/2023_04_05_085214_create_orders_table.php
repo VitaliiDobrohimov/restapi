@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedSmallInteger('number')->unique();
-            $table->unsignedSmallInteger('count');
+            $table->unsignedBigInteger('number')->unique();
+            $table->unsignedBigInteger('count');
           //  $table->unsignedSmallInteger('dishes_id');
-            $table->unsignedSmallInteger('total_cost');
+            $table->unsignedBigInteger('total_cost');
             $table->dateTime('date_closed')->nullable();
             $table->unsignedSmallInteger('waiter_id');
             //$table->unsignedSmallInteger('list_of_dishes_id');

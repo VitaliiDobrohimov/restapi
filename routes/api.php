@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Category;
 use App\Http\Controllers\Dish;
+use App\Http\Controllers\Order\AddDishController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -55,6 +56,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::get('/dishes/{id}/edit', 'EditController');
         Route::put('/dishes/{id}/update', 'UpdateController');
         Route::delete('/dishes/{id}/delete', 'DestroyController');
+
     });
 
     Route::group(['namespace'=>'App\Http\Controllers\Order'],function (){
@@ -64,6 +66,9 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::get('/orders/{id}/edit', 'EditController');
         Route::put('/orders/{id}/update', 'UpdateController');
         Route::delete('/orders/{id}/delete', 'DestroyController');
+        Route::post('/orders/{dish_id}/{order_id}', 'AddDishController');
+        Route::delete('/orders/{dish_id}/{order_id}/delete', 'DelDishController');
+
     });
 });
 

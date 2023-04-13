@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Order;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\StoreRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Dish;
 use App\Models\Order;
 use App\Models\User;
 
@@ -16,8 +17,8 @@ class StoreController extends Controller
         $this->authorize('create',auth()->user());
         $validator = $request->validated();
         $order = Order::create($validator);
-        $order->dishes()->attach();
-
+        $dish = Dish::find(1);
+        $order->dishes()->attach($dish,['count'=> 1]);
         if ($order){
             return response()->json([
                 'status' => 200,
@@ -29,5 +30,10 @@ class StoreController extends Controller
                 'message' => 'Ошибка создания заказа'
             ],500);
         }
+    }
+    public function addDish($id){
+
+
+
     }
 }

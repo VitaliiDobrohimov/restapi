@@ -27,6 +27,7 @@ class  Order extends Model
     }
     public function dishes():BelongsToMany
     {
-        return $this->belongsToMany(Dish::class,'list_of_dishes','orders_id','dishes_id');
+        return $this->belongsToMany(Dish::class,'list_of_dishes','orders_id','dishes_id')
+            ->withPivot('count');
     }
 }

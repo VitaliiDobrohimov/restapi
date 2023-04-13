@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class DelDishRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'number' =>'required|string|max:191|unigue',
-                'count'=>'numeric',
-                'total_cost' => 'numeric',
-                'date_closed' => 'date',
-                'waiter_id'=>'required|numeric'
+                'count'=>'required|numeric',
         ];
     }
 }

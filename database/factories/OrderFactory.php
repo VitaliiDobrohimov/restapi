@@ -20,8 +20,8 @@ class OrderFactory extends Factory
     {
         return [
             'number' => fake()->unique()->numberBetween(1,1000),
-            'count' => fake()->numberBetween(1,5),
-            'total_cost' => fake()->numberBetween(1,6545),
+            'count' => 0,
+            'total_cost' => 0,
             'date_closed' => null,
             'waiter_id' => fake()->numberBetween(1,3),
             'created_at'=>now(),
