@@ -34,6 +34,7 @@ class AddDishController extends Controller
                     $order->update([
                         'total_cost' => $order['total_cost'] + ($validator["count"]* $dish['cost']),
                         'count' => $order->count + $validator["count"],
+                        'updated_at'=> now()
                     ]);
                     return response()->json([
                         'status' => 200,
@@ -46,6 +47,7 @@ class AddDishController extends Controller
                     $order->update([
                         'total_cost' =>  $order['total_cost'] + ($validator["count"] * $dish['cost']),
                         'count' => $order->count + $validator["count"],
+                        'updated_at'=> now()
                     ]);
                     return response()->json([
                         'status' => 200,

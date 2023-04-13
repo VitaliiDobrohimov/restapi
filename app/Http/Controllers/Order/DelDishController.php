@@ -35,6 +35,7 @@ class DelDishController extends Controller
                     $order->update([
                         'total_cost' => $order['total_cost'] - ($validator['count'] * $dish['cost']),
                         'count' => $order->count - $validator["count"],
+                        'updated_at'=> now()
                     ]);
 
 

@@ -27,7 +27,4 @@ class EditController extends Controller
             ],404);
         }
     }
-
-
-
 }
