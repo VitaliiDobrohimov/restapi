@@ -23,7 +23,11 @@ class IndexController extends Controller
         if (isset($request['orderBy'])&&isset($request['sort'])){
             return $filter->orderBy($request['orderBy'],$request['sort'])->get();
         }
-        return Category::filter($filter)->get();
+        elseif (isset($request['name'])){
+            $data->where('name','like',"%{$request['name']}%")->get();
+        }
+
+        return $data->paginate(10);
 
 
     }

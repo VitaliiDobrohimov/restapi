@@ -17,8 +17,6 @@ class StoreController extends Controller
         $this->authorize('create',auth()->user());
         $validator = $request->validated();
         $order = Order::create($validator);
-        $dish = Dish::find(1);
-        $order->dishes()->attach($dish,['count'=> 1]);
         if ($order){
             return response()->json([
                 'status' => 200,
@@ -31,9 +29,5 @@ class StoreController extends Controller
             ],500);
         }
     }
-    public function addDish($id){
 
-
-
-    }
 }

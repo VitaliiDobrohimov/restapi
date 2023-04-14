@@ -23,14 +23,13 @@ class AddDishController extends Controller
         $validator = $request->validated();
         $order = Order::find($order_id);
 
-        if ($order){
+        if ($order&& !$order['is_closed']){
             $dish = Dish::find($dish_id);
-            $count = $order['count'];
             if ($dish) {
                 if($order->dishes()->firstWhere('dishes_id','=',$dish['id'])){
                     $count_old = $order->dishes()->firstWhere('dishes_id','=',$dish['id'])->pivot->count;
                     $order->dishes()->detach($dish);
-                    $order->dishes()->attach($dish,['count'=>$count_old + $validator['count'] ]);
+                    $order->dishes()->attach($dish,['count'=>$count_old + $validator['count'],'created_at'=> now(),'updated_at'=> now()]);
                     $order->update([
                         'total_cost' => $order['total_cost'] + ($validator["count"]* $dish['cost']),
                         'count' => $order->count + $validator["count"],

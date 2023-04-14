@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Order;
+namespace App\Http\Requests\Dish;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+
+class IndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'number' =>'required|max:191|unique:orders',
-                'date_closed' => 'date',
-                'waiter_id'=>'required|numeric'
+            'name' =>'string|max:191',
+            'composition' =>'string|max:250',
+            'calories' => 'numeric',
+            'cost' => 'numeric',
+            'orderBy'=>[Rule::in(['composition', 'calories','cost','name'])],
         ];
     }
 }
-

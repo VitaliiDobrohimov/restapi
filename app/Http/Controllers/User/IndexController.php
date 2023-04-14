@@ -27,39 +27,21 @@ class IndexController extends Controller
         if (isset($data['orderBy'])&&isset($data['sort'])){
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
-            return User::filter($filter)->get() ;
 
+        if (isset($request['name'])){
 
-        /*if ($request['orderBy'] == 'name')
-        {
-            if ($request['sort'] == 'desc'){
-                return $data->orderBy('id','desc')->get();
-            }
-            elseif ($request['sort'] == 'asc'){
-                return $data->orderBy('id','asc')->get();
-            }
-
-        }elseif ($request['orderBy'] == 'name'){
-
-        }*/
-
-        //User::filter($filter)->paginate(10);
-
-//        dd($users);
-        //$users = User::paginate(10);
-/*
-        if ($users->count() >0 ){
-            return response()->json([
-                'status'=> 200,
-                'name' =>$users
-            ],200);
+            $data->where('name','like',"%{$request['name']}%")->get();
         }
-        else {
-            return response()->json([
-                'status'=> 404,
-                'message' =>'Ошибка'
-            ],404);
+        if (isset($request['email'])){
 
-        }*/
+            $data->where('name','like',"%{$request['name']}%")->get();
+        }
+        if (isset($request['role_id'])){
+
+            $data->where('role_id','like',"%{$request['role_id']}%")->get();
+        }
+
+        return $data->paginate(10);
+
     }
 }

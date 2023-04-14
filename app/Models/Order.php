@@ -20,6 +20,7 @@ class  Order extends Model
         'total_cost',
         'date_closed',
         'waiter_id',
+        'is_closed'
     ];
     public function user():BelongsTo
     {

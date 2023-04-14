@@ -56,7 +56,7 @@ class User extends Authenticatable
     }
     public function users():HasMany
     {
-        return $this->HasMany(Orders::class, 'waiter_id', 'id');
+        return $this->HasMany(Order::class, 'waiter_id', 'id');
     }
 
 

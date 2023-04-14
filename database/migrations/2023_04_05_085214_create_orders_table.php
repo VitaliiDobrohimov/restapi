@@ -14,22 +14,16 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('number')->unique();
-            $table->unsignedBigInteger('count');
-          //  $table->unsignedSmallInteger('dishes_id');
-            $table->unsignedBigInteger('total_cost');
+            $table->unsignedBigInteger('count')->default(0);
+            $table->unsignedBigInteger('total_cost')->default(0);
             $table->dateTime('date_closed')->nullable();
             $table->unsignedSmallInteger('waiter_id');
-            //$table->unsignedSmallInteger('list_of_dishes_id');
-
+            $table->boolean('is_closed')->default('false');
             $table->timestamps();
             //IDX
             $table->index('waiter_id','orders_users_idx');
-         //   $table->index('dishes_id','orders_list_of_dishes_idx');
-
-
             //FX
             $table->foreign('waiter_id','orders_users_fk')->on('users')->references('id')->cascadeOnDelete();;
-          //  $table->foreign('dishes_id','orders_list_of_dishes_fk')->on('list_of_dishes')->references('id');
 
 
         });

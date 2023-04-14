@@ -25,6 +25,9 @@ class IndexRequest extends FormRequest
     {
         return [
             'name' =>'string|max:191',
+            'orderBy'=>[Rule::in(['number', 'total_cost','date_closed','waiter_id'])],
+            'email'=> 'email',
+            'role_id'=>'numeric'
         ];
     }
 }

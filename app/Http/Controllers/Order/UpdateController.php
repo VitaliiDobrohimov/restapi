@@ -13,15 +13,16 @@ use App\Models\User;
 class UpdateController extends Controller
 {
     public function __invoke(UpdateRequest $request, int $id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('update',auth()->user());
         $validator = $request->validated();
-        $order = Order::findOrFail($id);
+        $order = Order::find($id);
         if ($order)
         {
             $order->update($validator);
             return response()->json([
                 'status' => 200,
-                'message' => "Заказ успешно обновлен"
+                'message' => "Заказ успешно обновлен",
+                'data'=>$order
             ],200);
         }else{
             return response()->json([

@@ -68,8 +68,14 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::delete('/orders/{id}/delete', 'DestroyController');
         Route::post('/orders/{dish_id}/{order_id}', 'AddDishController');
         Route::delete('/orders/{dish_id}/{order_id}/delete', 'DelDishController');
+        Route::put('/orders/{id}/close', 'CloseController');
+
 
     });
+    Route::group(['namespace'=>'App\Http\Controllers\Reports'],function () {
+        Route::get('/reports/{id}', 'ShowController');
+    });
+
 });
 
 Route::post('/forgot-password',[AuthController::class,'forgotPassword']);

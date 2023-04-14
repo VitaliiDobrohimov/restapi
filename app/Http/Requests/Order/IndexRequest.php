@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Order;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+
+class IndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'number' =>'required|max:191|unique:orders',
-                'date_closed' => 'date',
-                'waiter_id'=>'required|numeric'
+            'name' =>'string|max:191',
+            'orderBy'=>[Rule::in(['number', 'total_cost','date_closed','waiter_id'])],
+            'number'=> 'numeric',
+            'date_closed'=>'date',
+            'total_cost'=>'string'
         ];
     }
 }
-

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Order;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\IndexRequest;
+use App\Http\Requests\Order\IndexRequest;
 use App\Models\Order;
 use App\Http\Controllers\Filters\OrderFilter;
+use App\Models\Report;
+use App\Models\User;
 
 
 class IndexController extends Controller
@@ -17,45 +19,30 @@ class IndexController extends Controller
         $data = $request->validated();
 
         $filter = app()->make(OrderFilter::class,['queryParams'=>array_filter($data)]);
-
         $data = Order::filter($filter);
-
         if (isset($request['orderBy'])&&isset($request['sort'])){
+
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
-        return Order::filter($filter)->get();
+        if (isset($request['name'])){
 
-
-        /*if ($request['orderBy'] == 'name')
-        {
-            if ($request['sort'] == 'desc'){
-                return $data->orderBy('id','desc')->get();
-            }
-            elseif ($request['sort'] == 'asc'){
-                return $data->orderBy('id','asc')->get();
-            }
-
-        }elseif ($request['orderBy'] == 'name'){
-
-        }*/
-
-        //User::filter($filter)->paginate(10);
-
-//        dd($users);
-        //$users = User::paginate(10);
-/*
-        if ($users->count() >0 ){
-            return response()->json([
-                'status'=> 200,
-                'name' =>$users
-            ],200);
+          $data->where("waiter_id",'=',
+                User::where('name',
+                    'like',
+                 "%{$request['name']}%")->first()->id)->get();
         }
-        else {
-            return response()->json([
-                'status'=> 404,
-                'message' =>'Ошибка'
-            ],404);
+        elseif (isset($request['number'])){
+           $data->where('number','like',"%{$request['number']}%")->get();
+        }
+        if (isset($request['total_cost'])){
 
-        }*/
+            $data->where('total_cost','like',"%{$request['total_cost']}%")->get();
+        }
+        elseif (isset($request['date_closed'])){
+            $data->where('date_closed','like',"%{$request['date_closed']}%")->get();
+        }
+        return $data->paginate(10);
+
     }
 }
+

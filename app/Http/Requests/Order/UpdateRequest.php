@@ -22,12 +22,10 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'number' =>'string|max:191',
-            'count'=>'numeric',
-            'composition' =>'string|max:250',
+            'number' =>'numeric|max:191',
             'total_cost' => 'numeric',
             'date_closed' => 'date',
-            'category_id' => 'numeric',
+            'is_closed' => 'boolean',
             'waiter_id'=>'numeric'
         ];
     }
