@@ -20,28 +20,27 @@ class IndexController extends Controller
     public function __invoke(IndexRequest $request)
     {
 
-        $this->authorize('view',auth()->user());
+        $this->authorize('view', auth()->user());
         $data = $request->validated();
-        $filter = app()->make(UserFilter::class,['queryParams'=>array_filter($data)]);
+        $filter = app()->make(UserFilter::class, ['queryParams' => array_filter($data)]);
         $data = User::filter($filter);
-        if (isset($data['orderBy'])&&isset($data['sort'])){
-            return $data->orderBy($request['orderBy'],$request['sort'])->get();
+
+        if (isset($request['orderBy'])&& isset($request['sort'])) {
+            return $data->orderBy($request['orderBy'], $request['sort'])->get();
+        }
+        elseif (isset($request['orderBy'])&& !isset($request['sort'])){
+            return $data->orderBy($request['orderBy'], 'asc')->get();
+        }
+        if ($data)
+            return $data->paginate(10);
+        else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Ошибка'
+            ], 404);
         }
 
-        if (isset($request['name'])){
-
-            $data->where('name','like',"%{$request['name']}%")->get();
-        }
-        if (isset($request['email'])){
-
-            $data->where('name','like',"%{$request['name']}%")->get();
-        }
-        if (isset($request['role_id'])){
-
-            $data->where('role_id','like',"%{$request['role_id']}%")->get();
-        }
-
-        return $data->paginate(10);
 
     }
 }
+

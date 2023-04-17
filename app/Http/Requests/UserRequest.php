@@ -28,7 +28,7 @@ class UserRequest extends FormRequest
                 'email'=>'required|email|max:191|unique:users',
                 'password'=>'required|max:25',
                 'pin_code'=>'required|digits:4|max:4',
-                'role_id'=>Rule::in([1,2,3]),'|min:1|max:3'
+                'role_id'=>Rule::in([1,2,3]),'|min:1|max:3|required'
         ];
     }
 }

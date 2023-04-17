@@ -24,10 +24,10 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'name' =>'required|string|max:191',
+                'name' =>'string|max:191',
                 'email'=>'email|max:191|unique:users',
-                'password'=>'required|max:25',
-                'pin_code'=>'required|digits:4|max:4',
+                'password'=>'max:25',
+                'pin_code'=>'digits:4|max:4',
                 'role_id'=>Rule::in([1,2,3]),'|min:1|max:3'
         ];
     }

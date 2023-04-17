@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('total_cost')->default(0);
             $table->unsignedBigInteger('total_orders')->default(0);
-            $table->date('create_date')->nullable();
             $table->timestamps();
         });
     }

@@ -60,7 +60,7 @@ class AuthController extends Controller
                 else{
                     return response([
                         'message'=>'Неправильный Пинкод'
-                    ],401);
+                    ],402);
                 }
 
             }
@@ -71,7 +71,7 @@ class AuthController extends Controller
              auth()->user()->tokens()->delete();
             return response([
                    'message' => 'Авторизация завершена'
-             ],401);
+             ],200);
 }
 
     public function forgotPassword(Request $request){

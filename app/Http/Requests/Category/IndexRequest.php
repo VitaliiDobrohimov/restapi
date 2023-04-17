@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -24,11 +24,10 @@ class IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' =>'string|max:191',
-            'orderBy'=>[Rule::in(['name', 'email','role_id'])],
+            'name' =>'string',
+            'orderBy'=>[Rule::in(['name','image'])],
             'sort'=>[Rule::in(['asc', 'desc'])],
-            'email'=> 'email',
-            'role_id'=>'numeric'
+            'image'=> 'file'
         ];
     }
 }

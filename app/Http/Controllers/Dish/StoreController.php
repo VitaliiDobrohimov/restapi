@@ -27,9 +27,9 @@ class StoreController extends BaseController
             ],200);
         }else{
             return response()->json([
-                'status' => 500,
+                'status' => 501,
                 'message' => 'Ошибка создания блюда'
-            ],500);
+            ],501);
         }
     }
 

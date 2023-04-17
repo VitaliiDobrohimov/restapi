@@ -9,9 +9,7 @@ class Report extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'total_cost',
         'total_orders',
         'total_cost',
-        'create_date'
     ];
 }
