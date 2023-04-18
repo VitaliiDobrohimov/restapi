@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('pin_code')->unique();
             $table->foreignId('role_id')->nullable();
             $table->timestamps();
-
+            $table->rememberToken();
 
             $table->index('role_id','users_role_idx');
 

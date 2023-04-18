@@ -67,19 +67,25 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::put('/orders/{id}/update', 'UpdateController');
         Route::delete('/orders/{id}/delete', 'DestroyController');
         Route::post('/orders/{dish_id}/{order_id}', 'AddDishController');
-        Route::delete('/orders/{dish_id}/{order_id}/delete', 'DelDishController');
+        Route::delete('/orders/{dish_id}/{order_id}/{count}/delete', 'DelDishController');
         Route::put('/orders/{id}/close', 'CloseController');
 
 
     });
     Route::group(['namespace'=>'App\Http\Controllers\Reports'],function () {
         Route::get('/reports/{id}', 'ShowController');
+        Route::get('/reports', 'IndexController');
     });
 
 });
 
-Route::post('/forgotpassword',[AuthController::class,'forgotPassword']);
-//Route::post('/reset-password',[AuthController::class,'ResetPassword'])->name('password.reset');
+Route::get('/forgot-password',[AuthController::class,'forgotPassword']);
+Route::post('/reset-password',[AuthController::class,'resetPassword']);
+//Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
+Route::post('/reset-password',[AuthController::class,'resetPassword']
+
+)->middleware('guest')->name('password.reset');
+
 
 
 

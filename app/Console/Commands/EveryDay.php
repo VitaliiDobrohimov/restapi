@@ -37,10 +37,11 @@ class EveryDay extends Command
             $count = $orders->count();
             $total_cost = $orders->sum('total_cost');
         }
-        Report::create([
+        $report = Report::create([
                 'total_cost'=>$total_cost,
                 'total_orders'=>$count,
             ]
         );
+        $report->save();
     }
 }

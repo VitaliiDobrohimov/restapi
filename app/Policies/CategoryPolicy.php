@@ -19,7 +19,7 @@ class CategoryPolicy
     public function view(User $user): bool
     {
        // return $model->role_id === [1,2,3];
-        return in_array($user['role_id'],[1,2]);
+        return in_array($user['role_id'],[1,2,3]);
     }
 
 

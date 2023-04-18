@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\User\PasswordMail;
+use App\Models\Report;
+use App\Models\ResetPassword;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
-use Nette\Schema\ValidationException;
-use Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class AuthController extends Controller
 {
@@ -37,8 +45,8 @@ class AuthController extends Controller
                 {
                     $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json([
+                        'role_id'=> $user->role->name,
                         'access_token' => $token,
-                        'token_type' => 'Bearer',
                     ]);
                 }
                 else{
@@ -53,6 +61,7 @@ class AuthController extends Controller
                 if (User::where('pin_code',$validatedData['pin_code'])->first()){
                     $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json([
+                        'role_id'=> $user->role->name,
                         'access_token' => $token,
                         'token_type' => 'Bearer',
                     ]);
@@ -70,27 +79,62 @@ class AuthController extends Controller
         public function logout(){
              auth()->user()->tokens()->delete();
             return response([
-                   'message' => 'Авторизация завершена'
+                   'message' => 'ВИТАЛЯ УСТАЛъ'
              ],200);
 }
+    public function forgot_Password(Request $request){
 
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+
+
+    }
     public function forgotPassword(Request $request){
 
             $request->validate([
                 'email'=> 'required|email'
            ]);
-            $status = Password::sendResetLink(
-                $request->only('email')
-            );
-            if ($status != Password::RESET_LINK_SENT){
-                throw ValidationException::withMessages([
-                   'email'=>$status
-                ]);
-            }
-            return response(['status'=> $status]);
+        $resPassword = ResetPassword::create([
+                'email'=>$request->email,
+                'pin_code'=>rand(100000,999999),
+                'expires_at'=>Carbon::tomorrow()
+            ]
+        );
+        $resPassword->save();
+        $password = $resPassword->pin_code;
+        Mail::to($request['email'])->send(new PasswordMail($password));
+
+        return ;
 
 
 }
+    public function resetPassword(Request $request){
+        $request->validate([
+            'pin_code' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill(['password' => Hash::make($password)])->setRememberToken(Str::random(60));
+                $user->save();
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('/login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
+    }
 
 
 }

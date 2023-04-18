@@ -65,9 +65,9 @@ class AddDishController extends Controller
         }
         else{
             return response()->json([
-                'status' => 500,
+                'status' => 502,
                 'message' => 'Нет заказа под таким номером'
-            ],500);
+            ],502);
         }
     }
 
