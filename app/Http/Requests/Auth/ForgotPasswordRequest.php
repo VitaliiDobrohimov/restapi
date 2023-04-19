@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class ForgotPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +23,14 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'name' =>'required|string|max:191',
-                'email'=>'required|email|max:191|unique:users',
-                'password'=>'required',
-                'pin_code'=>'required|digits:4|max:4',
-                'role_id'=>Rule::in([1,2,3]),'min:1|max:3|'
+            'email' => 'required|email',
         ];
     }
-}
+    public function messages()
+    {
+        return[
+            'email.required'=> 'Поле должно быть заполнено'
+        ];
 
+    }
+}

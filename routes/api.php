@@ -79,12 +79,13 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
 
 });
 
-Route::get('/forgot-password',[AuthController::class,'forgotPassword']);
+Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
+Route::post('/pincode-confirmation',[AuthController::class,'pincodeConfirmation']);
 Route::post('/reset-password',[AuthController::class,'resetPassword']);
 //Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
-Route::post('/reset-password',[AuthController::class,'resetPassword']
+//Route::post('/reset-password',[AuthController::class,'resetPassword']
 
-)->middleware('guest')->name('password.reset');
+//)->middleware('guest')->name('password.reset');
 
 
 

@@ -13,6 +13,7 @@ class StoreController extends Controller
     public function __invoke(UserRequest $request){
         $this->authorize('create',auth()->user());
         $validator = $request->validated();
+       // $validator['password']= bcrypt($validator['password']);
         $user = User::create($validator);
         if ($user){
             return response()->json([

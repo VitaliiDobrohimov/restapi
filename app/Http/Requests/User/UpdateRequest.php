@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
         return [
                 'name' =>'string|max:191',
                 'email'=>'email|max:191|unique:users',
-                'password'=>'max:25',
+                'password'=>'string',
                 'pin_code'=>'digits:4|max:4',
                 'role_id'=>Rule::in([1,2,3]),'|min:1|max:3'
         ];

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\PincodeConfirmationRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\User\PasswordMail;
 use App\Models\Report;
@@ -17,6 +20,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Collection;
 
 
 class AuthController extends Controller
@@ -79,7 +83,7 @@ class AuthController extends Controller
         public function logout(){
              auth()->user()->tokens()->delete();
             return response([
-                   'message' => 'ВИТАЛЯ УСТАЛъ'
+                       'message' => 'Вы вышли'
              ],200);
 }
     public function forgot_Password(Request $request){
@@ -96,41 +100,71 @@ class AuthController extends Controller
 
 
     }
-    public function forgotPassword(Request $request){
+    public function forgotPassword(ForgotPasswordRequest $request){
 
-            $request->validate([
-                'email'=> 'required|email'
-           ]);
-        $resPassword = ResetPassword::create([
-                'email'=>$request->email,
+            $validator = $request->validated();
+            $resPassword = ResetPassword::create([
+                'email'=>$validator['email'],
                 'pin_code'=>rand(100000,999999),
-                'expires_at'=>Carbon::tomorrow()
+                'expires_at'=>Carbon::now()->addHour()
             ]
         );
         $resPassword->save();
         $password = $resPassword->pin_code;
-        Mail::to($request['email'])->send(new PasswordMail($password));
-
-        return ;
-
+        if(Mail::to($request['email'])->send(new PasswordMail($password))){
+            return response()->json(
+                ['message'=>'Сообщение успешно отправлено'],200);
+        }
+        else{
+            return response()->json(
+                ['message'=>'Ошибка отправки'],400);
+        }
 
 }
-    public function resetPassword(Request $request){
-        $request->validate([
-            'pin_code' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
+public function pincodeConfirmation(PincodeConfirmationRequest $request)
+{
+    $request->validated();
+    $pin_code = ResetPassword::where('pin_code','=',($request['pin_code']))
+        ->where('expires_at','>=',date(now()))->first();
+    if ($pin_code){
+        return response()->json(
+            ['message'=>'Пин-код верный'],200);
+    }
+    else{
+        return response()->json(
+            ['message'=>'Пин-код неверный'],400);
+    }
+}
 
-        $status = Password::reset(
+    public function resetPassword(ResetPasswordRequest $request){
+        $validator = $request->validated();
+        $user = User::where('email',$validator['email'])->first();
+        if ($user){
+            if (Hash::check($validator['password'], $user['password']))
+            {
+                return response()->json(
+                    ['message'=>'Новый пароль не должен совпадать со старым'],401);
+            }
+            $validator['password'] = bcrypt($validator['password']);
+            $user->update($validator);
+            $res_password = ResetPassword::where('email','=',$user['email'])->first();
+            $res_password->delete();
+            return response()->json(
+                ['message'=>'Пароль успешно изменен'],200);
+        }
+        else{
+            return response()->json(
+                ['message'=>'Ошибка смены пароля'],400);
+        }
+
+       /* $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->forceFill(['password' => Hash::make($password)])->setRememberToken(Str::random(60));
                 $user->save();
                 event(new PasswordReset($user));
             }
-        );
-
+        );*/
         return $status === Password::PASSWORD_RESET
             ? redirect()->route('/login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);

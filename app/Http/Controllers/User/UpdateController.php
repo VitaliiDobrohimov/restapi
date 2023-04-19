@@ -17,7 +17,6 @@ class UpdateController extends Controller
         $user = User::find($id);
         if ($user)
         {
-
             $user->update($validator);
             return response()->json([
                 'status' => 200,
@@ -25,9 +24,9 @@ class UpdateController extends Controller
             ],200);
         }else{
             return response()->json([
-                'status' => 404,
+                'status' => 500,
                 'message' => 'Ошибка обновления пользователя'
-            ],404);
+            ],500);
         }
 
     }
