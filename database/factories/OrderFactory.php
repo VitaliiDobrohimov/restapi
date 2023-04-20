@@ -22,10 +22,11 @@ class OrderFactory extends Factory
             'number' => fake()->unique()->numberBetween(1,1000),
             'count' => 0,
             'total_cost' => 0,
-            'date_closed' => null,
+            'date_closed' => fake()->dateTime(),
             'waiter_id' => fake()->numberBetween(1,3),
             'created_at'=>now(),
             'updated_at'=>now(),
+            'is_closed'=>false
         ];
     }
 

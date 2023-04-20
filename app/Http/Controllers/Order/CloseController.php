@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Order;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\CloseOrderRequest;
 use App\Http\Requests\Order\UpdateRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Order;
@@ -14,10 +15,9 @@ class CloseController extends Controller
 {
     public function __invoke($id){
 
-        $this->authorize('update',auth()->user());
-
+        $this->authorize('update',Order::class);
         $order = Order::find($id);
-        if ($order){
+        if ($order && !$order->is_closed){
             $order->update([
                 'is_closed'=> 1,
                 'date_closed'=>now()

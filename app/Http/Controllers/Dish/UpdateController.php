@@ -14,7 +14,7 @@ class UpdateController extends BaseController
      * Display a listing of the resource.
      */
     public function __invoke (UpdateRequest $request, int $id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('update',Dish::class);
         $validator = $request->validated();
         $dish = Dish::findOrFail($id);
         if ($dish)

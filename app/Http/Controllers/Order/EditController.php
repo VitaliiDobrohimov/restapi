@@ -12,7 +12,7 @@ use App\Models\User;
 class EditController extends Controller
 {
     public function __invoke($id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('view',Order::class);
         $order = Order::find($id);
         if ($order){
             return response()->json([

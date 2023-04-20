@@ -32,15 +32,15 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role_id,[1,2]);
+        return in_array($user['role_id'],[1,2]);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user): bool
     {
-        return in_array($user->role_id,[1,2]);
+        return in_array($user['role_id'],[1,2]);
     }
 
     /**
@@ -48,7 +48,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return in_array($user->role_id,[1,2]);
+        return in_array($user['role_id'],[1,2]);
     }
 
     /**

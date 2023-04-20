@@ -17,7 +17,7 @@ class ShowController extends Controller
      * Display a listing of the resource.
      */
     public function __invoke($id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('view',Dish::class);
         $dish = Dish::find($id);
         if ($dish){
             return response()->json([

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -13,8 +14,7 @@ class OrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        //dd(11);
-        //return in_array($user['role_id'],[1,2,3]);
+
     }
 
     /**
@@ -22,7 +22,7 @@ class OrderPolicy
      */
     public function view(User $user): bool
     {
-       // return $model->role_id === [1,2,3];
+
         return in_array($user['role_id'],[1,2,3]);
     }
 
@@ -32,24 +32,25 @@ class OrderPolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role_id,[1,2,3]);
+        return in_array($user['role_id'],[1,2,3]);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user): bool
     {
 
-        return in_array($user->role_id,[1,2,3]);
+        //return $user->id === $model->waiter_id;
+        return in_array($user['role_id'],[1,2,3]);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user): bool
     {
-        return in_array($user->role_id,[1,2,3]);
+        return in_array($user['role_id'],[1,2,3]);
     }
 
 

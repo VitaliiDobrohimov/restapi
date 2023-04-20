@@ -18,7 +18,7 @@ class IndexController extends Controller
      */
     public function __invoke( IndexRequest $request)
     {
-        $this->authorize('view',auth()->user());
+        $this->authorize('view',Dish::class);
         $data = $request->validated();
         $filter = app()->make(DishesFilter::class,['queryParams'=>array_filter($data)]);
         $data = Dish::filter($filter);

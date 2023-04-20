@@ -26,20 +26,20 @@ class DishPolicy
 
     public function create(User $user): bool
     {
-        return in_array($user->role_id,[1,2]);
+        return in_array($user['role_id'],[1,2]);
     }
 
 
-    public function update(User $user, User $model): bool
+    public function update(User $user): bool
     {
 
-        return in_array($user->role_id,[1,2]);
+        return in_array($user['role_id'],[1,2]);
     }
 
 
-    public function delete(User $user, User $model): bool
+    public function delete(User $user): bool
     {
-        return in_array($user->role_id,[1,2]);
+        return in_array($user['role_id'],[1,2]);
     }
 
 

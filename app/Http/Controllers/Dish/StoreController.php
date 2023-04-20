@@ -15,7 +15,7 @@ class StoreController extends BaseController
      * Display a listing of the resource.
      */
     public function __invoke(StoreRequest $request){
-        $this->authorize('create',auth()->user());
+        $this->authorize('create',Dish::class);
         $validator = $request->validated();
         $validator['image'] = Storage::put('/DishesImage',$validator['image']);
       //  $this->service->store($validator);

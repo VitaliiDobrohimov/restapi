@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'name' =>'required|string|max:191',
+                'name' =>'required|string|max:191|unique:users',
                 'image'=>'required|file'
         ];
     }

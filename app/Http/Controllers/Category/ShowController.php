@@ -16,7 +16,7 @@ class ShowController extends Controller
      * Display a listing of the resource.
      */
     public function __invoke($id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('view',Category::class);
         $category = Category::find($id);
         if ($category){
             return response()->json([

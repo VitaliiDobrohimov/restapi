@@ -14,7 +14,7 @@ use App\Models\User;
 class StoreController extends Controller
 {
     public function __invoke(StoreRequest $request){
-        $this->authorize('create',auth()->user());
+        $this->authorize('create',Order::class);
         $validator = $request->validated();
         $order = Order::create($validator);
         if ($order){

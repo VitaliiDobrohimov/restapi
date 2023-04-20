@@ -12,7 +12,7 @@ use App\Models\User;
 class DestroyController extends Controller
 {
     public function __invoke($id){
-        $this->authorize('delete',auth()->user());
+        $this->authorize('delete',Order::class);
         $order = Order::find($id);
         if ($order){
             $order->delete();

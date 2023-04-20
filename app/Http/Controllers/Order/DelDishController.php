@@ -7,38 +7,40 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\DelDishRequest;
 use App\Models\Dish;
 use App\Models\Order;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class DelDishController extends Controller
 {
-    public function __invoke(DelDishRequest $request, $dish_id,$order_id,$count)
+
+    public function __invoke(DelDishRequest $request, $dish_id, $order_id)
     {
-        $this->authorize('update', auth()->user());
-       // $validator = $request->validated();
+
+        $this->authorize('update', Order::class);
+        $validator = $request->validated();
+
         $order = Order::find($order_id);
         if ($order && !$order['is_closed']) {
             $dish = Dish::find($dish_id);
             if ($dish) {
                 if ($order->dishes()->firstWhere('dishes_id', '=', $dish['id'])) {
                     $count_old = $order->dishes()->firstWhere('dishes_id', '=', $dish['id'])->pivot->count;
-                    if($count_old <$count)
+                    if($count_old <$validator['count'])
                         return response()->json([
                             'status' => 504,
                             'message' => "Введено неверное количсество блюд",
                         ], 504);
 
-
                     $order->dishes()->detach($dish);
 
-                    if ($count_old != $count)
-                        $order->dishes()->attach($dish,['count'=>$count_old - $count,
+                    if ($count_old != $validator['count'])
+                        $order->dishes()->attach($dish,['count'=>$count_old - $validator['count'],
                             'updated_at'=> now(),
                             'created_at'=> now()]);
                     $order->update([
-                        'total_cost' => $order['total_cost'] - ($count * $dish['cost']),
-                        'count' => $order->count - $count,
+                        'total_cost' => $order['total_cost'] - ($validator['count'] * $dish['cost']),
+                        'count' => $order->count - $validator['count'],
                         'updated_at'=> now()
                     ]);
-
 
                     return response()->json([
                         'status' => 200,

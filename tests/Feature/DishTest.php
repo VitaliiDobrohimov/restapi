@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Dish;
 use Illuminate\Http\Testing\File;
 use App\Models\Category;
 use App\Models\User;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Nette\Utils\Random;
 use Tests\TestCase;
 
-class CategoryTest extends TestCase
+class DishTest extends TestCase
 {
     /**
      * A basic feature test example.
@@ -22,47 +23,53 @@ class CategoryTest extends TestCase
 
     public function testCreate(): void
     {
-
         Storage::fake('local');
         $file = File::create('image.jpg',50);
-        $category = Category::factory()->make();
+        $dish = Dish::factory()->make();
         $response = $this->actingAs(User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]))
-            ->post('api/categories',
-                ['name' => $category->name,
-                    'image' => $file]);
-        $category = Category::all()->last();
-        $this->assertDatabaseHas('categories',[
-            'name'=> $category->name,
+            ->post('api/dishes',  [
+                'name' => $dish->name,
+                'image' => $file,
+                'composition' => $dish->composition,
+                'calories' => $dish->calories,
+                'cost' => $dish->cost,
+                'category_id' => $dish->category_id,
+                ]);;
+        $dish = Dish::all()->last();
+        $this->assertDatabaseHas('dishes',[
+            'name'=> $dish->name,
         ]);
-        Storage::disk('local')->assertExists($category->image);
+        Storage::disk('local')->assertExists($dish->image);
         $response->assertStatus(200);
     }
-    public function testUpdate(): void
+   public function testUpdate(): void
     {
 
         Storage::fake('local');
         $file = File::create('image.jpg',50);
-        $category = Category::factory()->make();
+        $dish = Dish::factory()->make();
         $id = rand(1,10);
-        $response = $this->actingAs(User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]))
-            ->put("api/categories/{$id}/update",
-                ['name' => $category->name,
-                    'image' => $file]);
-        $category = Category::find($id);
-        $this->assertDatabaseHas('categories',[
-            'name'=> $category->name,
-        ]);
-        Storage::disk('local')->assertExists($category->image);
+        $response = $this->actingAs(User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]))
+            ->put("api/dishes/{$id}/update",  [
+                'name' => $dish->name,
+                'image' => $file,
+                'composition' => $dish->composition,
+                'calories' => $dish->calories,
+                'cost' => $dish->cost,
+                'category_id' => $dish->category_id,
+            ]);;
+        $dish = Dish::find($id);
+        Storage::disk('local')->assertExists($dish->image);
         $response->assertStatus(200);
 
         $response = $this->actingAs(User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 3]))
-            ->put("api/categories/{$id}/update",
-                ['name' => $category->name,
+            ->put("api/dishes/{$id}/update",
+                ['name' => $dish->name,
                     'image' => $file]);
         $response->assertStatus(403);
         $response = $this->actingAs(User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 3]))
-            ->put("api/categories/{$id}/update",
-                ['name' => $category->name,
+            ->put("api/dishes/{$id}/update",
+                ['name' => $dish->name,
                     'image' => 'file']);
         $response->assertStatus(302);
 
@@ -72,28 +79,27 @@ class CategoryTest extends TestCase
 
         $id = rand(1, 10);
         $response = $this->actingAs(User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]))
-            ->get("api/categories/{$id}");
-
-        $response->assertStatus(200);
-    }
-
-    public function testEdit(): void
-    {
-        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
-        $id = rand(1, 10);
-        $response = $this->actingAs($user)
-            ->get("api/categories/{$id}/edit");
+            ->get("api/dishes/{$id}");
 
         $response->assertStatus(200);
     }
     public function testIndexOrderBy(): void
     {
         $user = User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
-        $category = Category::factory()->create();
+        $dish = Dish::factory()->create();
         $response = $this->actingAs($user)
-            ->get("/api/categories",
-                ['orderBy'=> $category->name,
+            ->get("/api/dishes",
+                ['orderBy'=> $dish->name,
                     'sort'=> 'desc']);
+        $response->assertStatus(200);
+    }
+    public function testEdit(): void
+    {
+        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
+        $id = rand(1, 10);
+        $response = $this->actingAs($user)
+            ->get("api/dishes/{$id}/edit");
+
         $response->assertStatus(200);
     }
     public function testDestroy(): void
@@ -101,22 +107,22 @@ class CategoryTest extends TestCase
         $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
         $id = rand(1,10);
         $response = $this->actingAs($user)
-            ->delete("api/categories/{$id}/delete");
-        $this->assertDatabaseMissing('categories',[
+            ->delete("api/dishes/{$id}/delete");
+        $this->assertDatabaseMissing('dishes',[
             'id'=> $id,
         ]);
         $response->assertStatus(200);
+
     }
 
 
     public function testIndexFind(): void
     {
         $user = User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
-        $category = Category::factory()->create();
+        $dish = Dish::factory()->create();
         $response = $this->actingAs($user)
-
             ->get("/api/categories",
-                ['name' => $category->name]);
+                ['name' => $dish->name]);
         $response->assertStatus(200);
 
     }

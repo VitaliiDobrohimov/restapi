@@ -14,12 +14,10 @@ class DestroyController extends BaseController
      * Display a listing of the resource.
      */
     public function __invoke($id){
-        $this->authorize('delete',auth()->user());
-        $category = Category::findOrFail($id);
-
+        $this->authorize('delete',Category::class);
+        $category = Category::find($id);
         if ($category){
-            if (isset($category['image']))
-                $this->service->destroy($category);
+            $this->service->destroy($category);
             $category->delete();
             return response()->json([
                 'status' => 200,

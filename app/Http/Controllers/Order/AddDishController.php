@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Order;
 
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\AddDishRequest;
 use App\Http\Requests\Order\StoreRequest;
@@ -11,7 +12,9 @@ use App\Models\Dish;
 use App\Models\List_of_dishes;
 use App\Models\Order;
 use App\Models\User;
+use App\Policies\OrderPolicy;
 use http\Client\Response;
+use Illuminate\Auth\Access\Gate;
 use function PHPUnit\Framework\isEmpty;
 
 
@@ -19,7 +22,7 @@ class AddDishController extends Controller
 {
     public function __invoke(AddDishRequest $request, $dish_id, $order_id){
 
-        $this->authorize('update',auth()->user());
+        $this->authorize('update',Order::class);
         $validator = $request->validated();
         $order = Order::find($order_id);
 
@@ -31,7 +34,7 @@ class AddDishController extends Controller
                     $order->dishes()->detach($dish);
                     $order->dishes()->attach($dish,['count'=>$count_old + $validator['count'],'created_at'=> now(),'updated_at'=> now()]);
                     $order->update([
-                        'total_cost' => $order['total_cost'] + ($validator["count"]* $dish['cost']),
+                        'total_cost' => $order['total_cost'] + ($validator["count"] * $dish['cost']),
                         'count' => $order->count + $validator["count"],
                         'updated_at'=> now()
                     ]);

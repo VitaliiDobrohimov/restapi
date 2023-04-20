@@ -15,7 +15,7 @@ class IndexController extends Controller
 {
     public function __invoke(IndexRequest $request)
     {
-        $this->authorize('view',auth()->user());
+        $this->authorize('view',Order::class);
         $data = $request->validated();
 
         $filter = app()->make(OrderFilter::class,['queryParams'=>array_filter($data)]);

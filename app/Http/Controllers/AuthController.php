@@ -156,18 +156,6 @@ public function pincodeConfirmation(PincodeConfirmationRequest $request)
             return response()->json(
                 ['message'=>'Ошибка смены пароля'],400);
         }
-
-       /* $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill(['password' => Hash::make($password)])->setRememberToken(Str::random(60));
-                $user->save();
-                event(new PasswordReset($user));
-            }
-        );*/
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->route('/login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
     }
 
 

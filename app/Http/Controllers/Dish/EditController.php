@@ -17,7 +17,7 @@ class EditController extends Controller
      * Display a listing of the resource.
      */
     public function __invoke($id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('view',Dish::class);
         $data = Dish::find($id);
         if ($data  ){
             return response()->json([

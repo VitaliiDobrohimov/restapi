@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\ResetPassword;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,4 +68,22 @@ class AuthTest extends TestCase
         $response->assertJsonPath('data.access_token',csrf_token());
 
     }
+    public function testSentEmail():void
+    {
+        $user = User::factory()->make(['password'=>bcrypt($password = '12345678'),'role_id' => 1,'pin_code'=>5555]);
+        $response = $this->post('api/forgot-password',
+            ['email'=>$user->email]);
+        $response->assertStatus(200);
+
+    }
+    public function testpincodeConfirmation(): void
+    {
+        $user = User::factory()->make(['role_id' => 1]);
+        $reset_password = ResetPassword::factory()->create();
+        $response = $this->post('api/pincode-confirmation',
+            ['pin_code'=>$reset_password->pin_code]);
+        $response->assertStatus(200);
+    }
+
+
 }

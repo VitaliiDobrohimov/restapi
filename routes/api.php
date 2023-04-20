@@ -67,7 +67,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::put('/orders/{id}/update', 'UpdateController');
         Route::delete('/orders/{id}/delete', 'DestroyController');
         Route::post('/orders/{dish_id}/{order_id}', 'AddDishController');
-        Route::delete('/orders/{dish_id}/{order_id}/{count}/delete', 'DelDishController');
+        Route::put('/orders/{dish_id}/{order_id}/delete', 'DelDishController');
         Route::put('/orders/{id}/close', 'CloseController');
 
 
@@ -82,10 +82,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
 Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
 Route::post('/pincode-confirmation',[AuthController::class,'pincodeConfirmation']);
 Route::post('/reset-password',[AuthController::class,'resetPassword']);
-//Route::post('/forgot-password',[AuthController::class,'forgotPassword']);
-//Route::post('/reset-password',[AuthController::class,'resetPassword']
 
-//)->middleware('guest')->name('password.reset');
 
 
 

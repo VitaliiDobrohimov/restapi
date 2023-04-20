@@ -22,9 +22,6 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'number' =>'numeric|max:191',
-            'total_cost' => 'numeric',
-            'date_closed' => 'date',
             'is_closed' => 'boolean',
             'waiter_id'=>'numeric'
         ];

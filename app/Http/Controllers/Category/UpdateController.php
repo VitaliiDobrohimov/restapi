@@ -18,13 +18,14 @@ class UpdateController extends BaseController
      * Display a listing of the resource.
      */
     public function __invoke (UpdateRequest $request, int $id){
-        $this->authorize('view',auth()->user());
+        $this->authorize('update',Category::class);
         $validator = $request->validated();
         $category = Category::find($id);
         if ($category)
         {
             if (isset($validator['image']))
             {
+
                 $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
                 $this->service->update($validator,$category);
             }

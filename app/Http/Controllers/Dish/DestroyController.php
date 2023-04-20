@@ -15,7 +15,7 @@ class DestroyController extends BaseController
      */
     public function __invoke($id){
 
-        $this->authorize('delete',auth()->user());
+        $this->authorize('delete',Dish::class);
         $data = Dish::find($id);
         if ($data){
             $this->service->destroy($data);

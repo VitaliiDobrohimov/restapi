@@ -13,7 +13,7 @@ use App\Models\User;
 class UpdateController extends Controller
 {
     public function __invoke(UpdateRequest $request, int $id){
-        $this->authorize('update',auth()->user());
+        $this->authorize('update',Order::class);
         $validator = $request->validated();
         $order = Order::find($id);
         if ($order)
