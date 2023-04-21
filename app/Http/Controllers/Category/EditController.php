@@ -15,18 +15,17 @@ class EditController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __invoke($id){
+    public function __invoke(Category $category){
+
         $this->authorize('view',Category::class);
-        $category = Category::find($id);
+       // $category = Category::find($category);
         if ($category){
             return response()->json([
-                'status' => 200,
                 'user' => $category,
             ],200);
         }
         else{
             return response()->json([
-                'status' => 404,
                 'message' => 'Нет категории под таким номером'
             ],404);
         }

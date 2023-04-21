@@ -15,9 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        //$schedule->command($this->makeReport())->daily('8:00');
-        $schedule->command('report:create')->daily('12:00')->runInBackground();
-        $schedule->command('auth:clear-resets')->everyThreeHours();
+      //  $schedule->command('report:create')->daily("12:00")->runInBackground();
+       $schedule->command('report:create')->dailyAt('12:00')->runInBackground();
     }
     /**
      * Register the commands for the application.

@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:latest
+        volumes:
+            - ./:/var/www/
+            - ./conf.d/:/etc/nginx/conf.d/
+        ports:
+            - "8181:80"
+        container_name: laravel
+

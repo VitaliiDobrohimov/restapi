@@ -8,19 +8,13 @@ use App\Http\Requests\Auth\PincodeConfirmationRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\User\PasswordMail;
-use App\Models\Report;
 use App\Models\ResetPassword;
 use Carbon\Carbon;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Collection;
 
 
 class AuthController extends Controller
@@ -138,25 +132,24 @@ public function pincodeConfirmation(PincodeConfirmationRequest $request)
 
     public function resetPassword(ResetPasswordRequest $request){
         $validator = $request->validated();
-        $user = User::where('email',$validator['email'])->first();
-        if ($user){
-            if (Hash::check($validator['password'], $user['password']))
-            {
+        $user = User::where('email',$validator['email'])->firstOrFail();
+        $res_password = ResetPassword::where('email','=',$user['email'])->first();
+        if ($res_password != null) {
+                if (Hash::check($validator['password'], $user['password'])) {
+                    return response()->json(
+                        ['message' => 'Новый пароль не должен совпадать со старым'], 401);
+                }
+                $validator['password'] = bcrypt($validator['password']);
+                $user->update($validator);
+                $res_password->delete();
                 return response()->json(
-                    ['message'=>'Новый пароль не должен совпадать со старым'],401);
+                    ['message' => 'Пароль успешно изменен'], 200);
+            } else {
+                return response()->json(
+                    ['message' => 'Ошибка смены пароля'], 400);
             }
-            $validator['password'] = bcrypt($validator['password']);
-            $user->update($validator);
-            $res_password = ResetPassword::where('email','=',$user['email'])->first();
-            $res_password->delete();
-            return response()->json(
-                ['message'=>'Пароль успешно изменен'],200);
-        }
-        else{
-            return response()->json(
-                ['message'=>'Ошибка смены пароля'],400);
         }
     }
 
 
-}
+

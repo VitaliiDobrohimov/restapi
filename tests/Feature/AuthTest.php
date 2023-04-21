@@ -78,12 +78,50 @@ class AuthTest extends TestCase
     }
     public function testpincodeConfirmation(): void
     {
-        $user = User::factory()->make(['role_id' => 1]);
+
         $reset_password = ResetPassword::factory()->create();
         $response = $this->post('api/pincode-confirmation',
             ['pin_code'=>$reset_password->pin_code]);
         $response->assertStatus(200);
+
     }
+
+    public function testResetPassword(): void
+    {
+        $user = User::factory()->create();
+        $reset_password = ResetPassword::factory()->create(['email'=>$user->email]);
+        $response = $this->post('api/reset-password',
+            ['email' =>$user->email,
+                'password' => 123456789,
+                'password_confirmation' => 123456789,
+                ]);
+
+        $this->assertDatabaseMissing('reset_passwords',[
+            'email'=> $reset_password->email,
+        ]);
+        $response->assertStatus(200);
+
+        $response = $this->post('api/reset-password',
+            ['email' =>$user->email,
+                'password' => 1234567,
+                'password_confirmation' => 12345678,
+            ]);
+        $response->assertStatus(302);
+        $response = $this->post('api/reset-password',
+            [
+                'password' => 1234567,
+                'password_confirmation' => 12345678,
+            ]);
+        $response->assertStatus(302);
+
+        $response = $this->post('api/reset-password',
+            ['email' =>'d456465456@mail.ru',
+                'password' => 12345678,
+                'password_confirmation' => 12345678,
+            ]);
+        $response->assertStatus(404);
+    }
+
 
 
 }

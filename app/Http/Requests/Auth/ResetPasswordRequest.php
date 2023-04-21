@@ -23,14 +23,15 @@ class ResetPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pin_code' => 'required|numeric|max:6|min:6',
+            'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
         ];
     }
     public function messages()
     {
         return[
-            'pin_code.required'=> 'Поле должно быть заполнено'
+            'email.required'=> 'Поле должно быть заполнено',
+            'password.confirmed'=>'Пароли не совпадают'
         ];
 
     }

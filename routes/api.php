@@ -19,7 +19,8 @@ Route::controller(AuthController::class)->group(function ()
     Route::post('/login', [AuthController::class, 'login']);
 
 });
-
+Route::get('/categories','App\Http\Controllers\Category\IndexController');
+Route::get('/dishes','App\Http\Controllers\DishIndexController');
 
 Route::group(['middleware'=> ['auth:sanctum']], function ()
 {
@@ -40,17 +41,17 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
 
 
     Route::group(['namespace'=>'App\Http\Controllers\Category'],function (){
-        Route::get('/categories','IndexController');
+
         Route::post('/categories', 'StoreController');
         Route::get('/categories/{id}', 'ShowController');
-        Route::get('/categories/{id}/edit', 'EditController');
+        Route::get('/categories/{category}/edit', 'EditController');
         Route::put('/categories/{id}/update', 'UpdateController');
         Route::delete('/categories/{id}/delete', 'DestroyController');
     });
 
 
     Route::group(['namespace'=>'App\Http\Controllers\Dish'],function (){
-        Route::get('/dishes','IndexController');
+
         Route::post('/dishes', 'StoreController');
         Route::get('/dishes/{id}', 'ShowController');
         Route::get('/dishes/{id}/edit', 'EditController');
