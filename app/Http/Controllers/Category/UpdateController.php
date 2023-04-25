@@ -25,8 +25,8 @@ class UpdateController extends BaseController
         {
             if (isset($validator['image']))
             {
-
-                $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
+                $validator['image'] = Storage::put('/public/CategoryImage',$validator['image']);
+                $validator['url'] = 'http://laravel-rest.ru/' . Storage::url($validator['image']);
                 $this->service->update($validator,$category);
             }
             $category->update($validator);

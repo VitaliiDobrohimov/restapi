@@ -25,7 +25,8 @@ class StoreRequest extends FormRequest
     {
         return [
                 'name' =>'required|string|max:191|unique:users',
-                'image'=>'required|file'
+                'image'=>'required|file',
+                'url'=> 'string'
         ];
     }
 }

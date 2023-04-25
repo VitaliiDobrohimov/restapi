@@ -17,7 +17,8 @@ class StoreController extends BaseController
     public function __invoke(StoreRequest $request){
         $this->authorize('create',Dish::class);
         $validator = $request->validated();
-        $validator['image'] = Storage::put('/DishesImage',$validator['image']);
+        $validator['image'] = Storage::put('/public/DishesImage',$validator['image']);
+        $validator['url'] = 'http://laravel-rest.ru/' . Storage::url($validator['image']);
       //  $this->service->store($validator);
         $dish = Dish::create($validator);
         if ($dish){

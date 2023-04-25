@@ -18,7 +18,7 @@ class IndexController extends Controller
      */
     public function __invoke( IndexRequest $request)
     {
-        $this->authorize('view',Dish::class);
+      //  $this->authorize('view',Dish::class);
         $data = $request->validated();
         $filter = app()->make(DishesFilter::class,['queryParams'=>array_filter($data)]);
         $data = Dish::filter($filter);
@@ -37,7 +37,7 @@ class IndexController extends Controller
         elseif (isset($request['cost'])){
             $data->where('calories','like',"%{$request['calories']}%")->get();
         }
-        return $data->paginate(10);
+        return $data->get();
 
 
     }

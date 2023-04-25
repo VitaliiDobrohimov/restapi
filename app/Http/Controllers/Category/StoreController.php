@@ -15,7 +15,8 @@ class StoreController extends BaseController
     public function __invoke(StoreRequest $request){
         $this->authorize('create',Category::class);
         $validator = $request->validated();
-        $validator['image'] = Storage::put('/CategoryImage',$validator['image']);
+        $validator['image'] = Storage::put('/public/CategoryImage',$validator['image']);
+        $validator['url'] = 'http://laravel-rest.ru/' . Storage::url($validator['image']);
         //$this->service->store($validator['image']);
         $category = Category::create($validator);
         if ($category){

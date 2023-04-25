@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+
+    web:
+        build:
+            context: .
+            dockerfile: docker/Nginx.Dockerfile
+        ports:
+            - 8090:80
+        links:
+            - fpm
+        volumes:
+            - ./:/var/www/laravel-docker
+
+
+    fpm:
+        build:
+            context: .
+            dockerfile: docker/Fpm.Dockerfile
+        volumes:
+            - ./:/var/www/laravel-docker
+            - ./.env.docker:/var/www/laravel-docker/.env
+        links:
+            - postgres
+        container_name: app
+
+
+
+    postgres:
+        image: postgres
+        restart: always
+        ports:
+            - 5431:5432
+        environment:
+            POSTGRES_DB: test_project
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: root
+        volumes:
+            - /var/lib/postgresql:/var/lib/postgresql
+
+
+
+

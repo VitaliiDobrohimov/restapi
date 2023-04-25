@@ -10,6 +10,7 @@ class DishesFilter extends AbstractFilter
     public const COMPOSITION = 'composition';
     public const COST = 'cost';
     public const CALORIES = 'calories';
+    public const CATEGORY_ID = 'category_id';
 
 
     protected function getCallbacks(): array
@@ -19,6 +20,8 @@ class DishesFilter extends AbstractFilter
             self::COMPOSITION => [$this, 'composition'],
             self::COST => [$this, 'cost'],
             self::CALORIES => [$this, 'calories'],
+            self::CATEGORY_ID => [$this, 'category_id'],
+
         ];
     }
 
@@ -39,5 +42,10 @@ class DishesFilter extends AbstractFilter
     public function calories(Builder $builder, $value)
     {
         $builder->where('calories', $value);
+
+    }
+    public function category_id(Builder $builder, $value)
+    {
+        $builder->where('category_id', $value);
     }
 }

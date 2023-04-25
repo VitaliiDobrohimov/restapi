@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -23,7 +24,8 @@ class UserPolicy
     public function view(User $user): bool
     {
        // return $model->role_id === [1,2,3];
-        return in_array($user['role_id'],[1,2]);
+
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
 
@@ -32,7 +34,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user['role_id'],[1,2]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
     /**
@@ -40,7 +42,7 @@ class UserPolicy
      */
     public function update(User $user): bool
     {
-        return in_array($user['role_id'],[1,2]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
     /**
@@ -48,7 +50,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return in_array($user['role_id'],[1,2]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
     /**

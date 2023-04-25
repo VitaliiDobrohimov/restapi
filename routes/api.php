@@ -20,7 +20,7 @@ Route::controller(AuthController::class)->group(function ()
 
 });
 Route::get('/categories','App\Http\Controllers\Category\IndexController');
-Route::get('/dishes','App\Http\Controllers\DishIndexController');
+Route::get('/dishes','App\Http\Controllers\Dish\IndexController');
 
 Route::group(['middleware'=> ['auth:sanctum']], function ()
 {
@@ -33,7 +33,6 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::get('/users', 'IndexController');
         Route::post('/users', 'StoreController');
         Route::get('/users/{id}', 'ShowController');
-        Route::get('/users/{id}/edit', 'EditController');
         Route::put('/users/{id}/update', 'UpdateController');
         Route::delete('/users/{id}/delete', 'DestroyController');
 
@@ -44,7 +43,6 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
 
         Route::post('/categories', 'StoreController');
         Route::get('/categories/{id}', 'ShowController');
-        Route::get('/categories/{category}/edit', 'EditController');
         Route::put('/categories/{id}/update', 'UpdateController');
         Route::delete('/categories/{id}/delete', 'DestroyController');
     });
@@ -54,7 +52,6 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
 
         Route::post('/dishes', 'StoreController');
         Route::get('/dishes/{id}', 'ShowController');
-        Route::get('/dishes/{id}/edit', 'EditController');
         Route::put('/dishes/{id}/update', 'UpdateController');
         Route::delete('/dishes/{id}/delete', 'DestroyController');
 
@@ -64,7 +61,6 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::get('/orders','IndexController');
         Route::post('/orders', 'StoreController');
         Route::get('/orders/{id}', 'ShowController');
-        Route::get('/orders/{id}/edit', 'EditController');
         Route::put('/orders/{id}/update', 'UpdateController');
         Route::delete('/orders/{id}/delete', 'DestroyController');
         Route::post('/orders/{dish_id}/{order_id}', 'AddDishController');

@@ -43,7 +43,7 @@ class AuthController extends Controller
                 {
                     $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json([
-                        'role_id'=> $user->role->name,
+                        'role_id'=> $user->role,
                         'access_token' => $token,
                     ]);
                 }
@@ -59,7 +59,7 @@ class AuthController extends Controller
                 if (User::where('pin_code',$validatedData['pin_code'])->first()){
                     $token = $user->createToken('auth_token')->plainTextToken;
                     return response()->json([
-                        'role_id'=> $user->role->name,
+                        'role_id'=> $user->role,
                         'access_token' => $token,
                         'token_type' => 'Bearer',
                     ]);

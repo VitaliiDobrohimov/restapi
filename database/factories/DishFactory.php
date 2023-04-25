@@ -20,7 +20,8 @@ class DishFactory extends Factory
     {
         return [
            'name' => fake()->unique()->name(),
-            'image' => fake()->imageUrl(),
+            'image'=> fake()->filePath(),
+            'url'=> fake()->imageUrl,
            'composition' => fake()->text,
             'calories' => fake()->randomNumber(),
             'cost' => fake()->numberBetween(1000,10000),

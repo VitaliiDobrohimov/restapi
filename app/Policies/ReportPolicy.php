@@ -2,20 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\Order;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
 
-class OrderPolicy
+class ReportPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-
+        //dd(11);
+        //return in_array($user['role_id'],[1,2,3]);
     }
 
     /**
@@ -23,8 +23,9 @@ class OrderPolicy
      */
     public function view(User $user): bool
     {
+       // return $model->role_id === [1,2,3];
 
-        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN,Role::IS_WAITER]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
 
@@ -33,7 +34,7 @@ class OrderPolicy
      */
     public function create(User $user): bool
     {
-        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN,Role::IS_WAITER]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
     /**
@@ -41,20 +42,24 @@ class OrderPolicy
      */
     public function update(User $user): bool
     {
-
-        //return $user->id === $model->waiter_id;
-        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN,Role::IS_WAITER]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user): bool
+    public function delete(User $user, User $model): bool
     {
-        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN,Role::IS_WAITER]);
+        return in_array($user->role()->first()->name,[Role::IS_SUPERADMIN,Role::IS_ADMIN]);
     }
 
-
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, User $model): bool
+    {
+        //
+    }
 
 
 

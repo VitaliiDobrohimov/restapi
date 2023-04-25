@@ -1,0 +1,1527 @@
+openapi: 3.0.0
+info:
+  title: Ресторан Rest API Спецификация
+  version: 0.0.1
+servers: 
+  - url: https://laravel-rest.ru/api/
+    description: Dev server
+paths:
+  /users:
+    get:
+      summary: Метод получения списка пользователей
+      tags:
+      - Users
+      operationId: getAllUsers
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
+      parameters: 
+        - name: orderBy
+          in: query
+          required: false
+          description: Идентификатор сортировки
+          schema:
+            type: string
+            enum: 
+             - name
+             - email
+             - role_id
+            example: name
+        - name: sort
+          in: query
+          required: false
+          description: Направление сортировки
+          schema:
+            type: string
+            enum:
+            - asc
+            - desc
+            example: desc
+        - name: name
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example: Vitalii
+        - name: role_id
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 2
+        - name: email
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example: dod300@yandex.ru
+          
+      responses:
+        '200':
+          description: Успешный ответ со списком пользователей
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+    post:
+      summary: Метод создания пользователя
+      tags:
+      - Users
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '200':
+          description: Успешный ответ c созданием  пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+
+  /users/{id}:
+    get:
+      summary: Метод получения пользователя по идентификатору
+      tags:
+      - Users
+      operationId: getUserById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+          example: 2
+      responses:
+        '200':
+          description: Успешный ответ c номером определнного пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  
+               
+  /users/{id}/update:
+    put:
+      summary: Метод изменения пользователя
+      tags: 
+      - Users
+      operationId:  updateUserById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+          example: 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+      responses:
+        '200':
+          description: Успешное изменение пользователя
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: Ошибка изменения 
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+      
+  /users/{id}/delete:
+    delete:
+      summary: Метод удаления пользователя по идентификатору
+      tags: 
+        - Users
+      operationId: destroyUserToById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+          example: 2
+      responses:
+        '200':
+          description: Успешное удаление
+          content:
+            application/json: {}
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+              
+  /login:
+    post:
+      summary: Авторизация пользователя
+      tags: 
+      - Auth
+      operationId: loginUser
+      description: Пользователь авторизуется либо только по пин-коду, либо почта+пароль
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
+      responses:
+        '200':
+          description: Успешный ответ пользователь авторизован
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginRegister"
+        '401':
+          description:  Неправильные логин или пароль
+          content:
+            application/json: {}
+        '402':
+          description:  Неправильный пин-код
+          content:
+            application/json: {}
+        
+        default:
+          description: Ошибка. Неверные данные
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /logout:
+    post:
+      summary: Авторизация пользователя
+      tags: 
+        - Auth
+      operationId: logoutUser
+      description: Пользователь выходит из системы
+      responses:
+        '200':
+          description: Авторизация завершена
+          content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Logout"
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /register:
+    post:
+      summary: Регистрация пользователя
+      tags: 
+        - Auth
+      operationId: registerUser
+      description: Регистрация пользователя в системе
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUser"
+      responses:
+        '200':
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginRegister"
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  
+  /forgot-password:
+    post:
+      summary: Отправка сообщения на почту с кодом
+      tags: 
+        - Auth
+      operationId: forgotpassword
+      description: Отправка сообщения на почту
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPassword"
+      responses:
+        '200':
+          description: Успешная регистрация
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForgotPasswordSuccess"
+        default:
+          description: Ошибка
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /pincode-confirmation:
+    post:
+      summary: Проверка пин-кода отпраленнного на почту 
+      tags: 
+        - Auth
+      operationId: pincodeConformition
+      description: Проверка пин-кода отпраленнного на почту 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Password_confirmation"
+      responses:
+        '200':
+          description: Пинкод верный
+          content:
+            application/json: {}
+        default:
+          description: Пинкод неверный
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error" 
+              
+  /reset-password:
+    post:
+      summary: Процедура сброса пароля
+      tags: 
+        - Auth
+      operationId: resetPassword
+      description: Ввод нового пароля
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPassword"
+      responses:
+        '200':
+          description: Пароль успешно изменен
+          content:
+            application/json: {}
+        '401':
+          description: Новый пароль не должен совпадать со старым
+          content:
+            application/json: {}
+        '400':
+          description: Ошибка смены пароля
+          content:
+            application/json: {}
+        default:
+          description: Пинкод неверный
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error" 
+      
+      
+  /categories/{id}:
+    get:
+      summary: Метод получения категории по идентификатору
+      tags:
+      - Category
+      operationId: getCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор категории
+          schema:
+            type: string
+          example: 3
+      responses:
+        '200':
+          description: Успешный ответ c номером определнной категории
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+        
+
+               
+  /categories:
+    post:
+      summary: Метод создания категории
+      tags:
+      - Category
+      operationId: createCategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        '200':
+          description: Успешный ответ c созданием категории
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+    get:
+      summary: Метод получения списка категорий
+      tags:
+      - Category
+      operationId: getAllCategory
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметрах. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет все категории без фильтров 
+      parameters: 
+        - name: orderBy
+          in: query
+          required: false
+          description: Идентификатор сортировки
+          schema:
+            type: string
+            enum: 
+             - name
+             - image
+            example: name
+        - name: sort
+          in: query
+          required: false
+          description: Направление сортировки
+          schema:
+            type: string
+            enum:
+            - asc
+            - desc
+            example: desc
+        - name: name
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example: Vitalii
+        - name: image
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example: borch.jpg
+          
+      responses:
+        '200':
+          description: Успешный ответ со списком категории
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Categories"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+ 
+  /categories/{id}/update:
+    put:
+      summary: Метод изменения категории
+      tags: 
+      - Category
+      operationId:  updateCategoryById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор категории
+          schema:
+            type: string
+          example: 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCategoryRequest"
+      responses:
+        '200':
+          description: Успешное изменение категории
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        default:
+          description: Ошибка изменения 
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+ 
+              
+  /categories/{id}/delete:
+    delete:
+      summary: Метод удаления категории по идентификатору
+      tags: 
+        - Category
+      operationId: destroyCategoryToById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор категории
+          schema:
+            type: string
+          example: 2
+      responses:
+        '200':
+          description: Успешное удаление
+          content:
+            application/json: {}
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /dishes/{id}:
+    get:
+      summary: Метод получения блюда по идентификатору
+      tags:
+      - Dishes
+      operationId: getDishById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор блюда
+          schema:
+            type: string
+          example: 2
+      responses:
+        '200':
+          description: Успешный ответ c номером определнного блюда
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dish"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  
+  /dishes:
+    post:
+      summary: Метод создания блюда
+      tags:
+      - Dishes
+      operationId: createDish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Dish"
+      responses:
+        '200':
+          description: Успешный ответ c созданием блюда
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dish"
+        '501':
+            description: Ошибка создания блюда
+            content:
+              application/json: {}
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+    
+    get:
+      summary: Метод получения списка блюд
+      tags:
+      - Dishes
+      operationId: getAllDishes
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
+      parameters: 
+        - name: orderBy
+          in: query
+          required: false
+          description: Идентификатор сортировки
+          schema:
+            type: string
+            enum: 
+             - name
+             - composition
+             - calories
+             - cost
+            example: name
+        - name: sort
+          in: query
+          required: false
+          description: Направление сортировки
+          schema:
+            type: string
+            enum:
+            - asc
+            - desc
+            example: desc
+        - name: name
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example: Кашка
+        - name: composition
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example:  Что-то относящиеся к составу блюда я хз
+        - name: calories
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 236
+        - name: cost
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 5000
+        - name: category_id
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 14
+      responses:
+        '200':
+          description: Успешный ответ со списком блюд
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dishes"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"  
+               
+  /dishes/{id}/update:
+    put:
+      summary: Метод изменения блюда
+      tags: 
+      - Dishes
+      operationId:  updateDishesById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор блюда
+          schema:
+            type: string
+          example: 3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDishesRequest"
+      responses:
+        '200':
+          description: Успешное изменение категории
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dish"
+        default:
+          description: Ошибка изменения 
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"           
+  /dishes/{id}/delete:
+    delete:
+      summary: Метод удаления блюда по идентификатору
+      tags: 
+        - Dishes
+      operationId: destroyDishToById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор  блюда
+          schema:
+            type: string
+          example: 55
+      responses:
+        '200':
+          description: Успешное удаление
+          content:
+            application/json: {}
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /orders/{id}:
+    get:
+      summary: Метод получения заказа по идентификатору
+      tags:
+      - Orders
+      operationId: getOrderById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: string
+          example: 2
+      responses:
+        '200':
+          description: Успешный ответ c номером определнного заказа
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+
+  /orders:
+    post:
+      summary: Метод создания заказа
+      tags:
+      - Orders
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        '200':
+          description: Успешный ответ c созданием заказа
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        '501':
+            description: Ошибка создания заказа
+            content:
+              application/json: {}
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+    
+    get:
+      summary: Метод получения списка заказа
+      tags:
+      - Orders
+      operationId: getAllOrders
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
+      parameters: 
+        - name: orderBy
+          in: query
+          required: false
+          description: Идентификатор сортировки
+          schema:
+            type: string
+            enum: 
+             - number
+             - total_cost
+             - date_closed
+             - waiter_id
+            example: name
+        - name: sort
+          in: query
+          required: false
+          description: Направление сортировки
+          schema:
+            type: string
+            enum:
+            - asc
+            - desc
+            example: desc
+        - name: name
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: string
+            example: Кашка
+        - name: number
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example:  235
+        - name: date_closed
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 2023-04-16 11:34:35
+        - name: total_cost
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 5000
+      responses:
+        '200':
+          description: Успешный ответ со списком блюд
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /orders/{id}/update:
+    put:
+      summary: Метод изменения заказа
+      tags: 
+      - Orders
+      operationId:  updateOrderById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: string
+          example: 3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderRequest"
+      responses:
+        '200':
+          description: Успешное изменение категории
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        default:
+          description: Ошибка изменения 
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"           
+  /orders/{id}/delete:
+    delete:
+      summary: Метод удаления заказа по идентификатору
+      tags: 
+        - Orders
+      operationId: destroyOrderToById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор  заказа
+          schema:
+            type: string
+          example: 55
+      responses:
+        '200':
+          description: Успешное удаление
+          content:
+            application/json: {}
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"    
+  /orders/{dish_id}/{order_id}:
+    post:
+      summary: Метод добавления блюда в заказ по идентификатору
+      tags: 
+        - Orders
+      operationId: addDishInOrderById
+      parameters: 
+        - name: dish_id
+          in: path
+          required: true
+          description: Идентификатор  блюда
+          schema:
+            type: string
+          example: 23
+        - name: order_id
+          in: path
+          required: true
+          description: Идентификатор  заказа
+          schema:
+            type: string
+          example: 5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDishInOrder"
+      responses:
+        '200':
+          description:  Блюдо успешно добавлено
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Dish"
+        '501':
+          description: Нет блюда под таким номером
+          content:
+            application/json: {}
+        '502':
+          description: Нет заказа под таким номером
+          content:
+            application/json: {}    
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"    
+  /orders/{dish_id}/{order_id}/delete:
+    put:
+      summary: Метод удаления блюд из заказа по идентификатору
+      tags: 
+        - Orders
+      operationId: destroyDishInOrderById
+      parameters: 
+        - name: dish_id
+          in: path
+          required: true
+          description: Идентификатор  блюда
+          schema:
+            type: string
+          example: 23
+        - name: order_id
+          in: path
+          required: true
+          description: Идентификатор  заказа
+          schema:
+            type: string
+          example: 5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DelDishInOrder"  
+      responses:
+        '200':
+          description:  Блюдо успешно удалено
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Dish"
+        '501':
+          description: Нет блюда под таким номером
+          content:
+            application/json: {}
+        '502':
+          description: Блюдо не найдено в заказе
+          content:
+            application/json: {}
+        '503':
+          description: Нет заказа под таким номером
+          content:
+            application/json: {}
+        '504':
+          description:  Введено неверное количество блюд
+          content:
+            application/json: {}    
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"    
+  /orders/{id}/close:
+    put:
+      summary: Метод закрытия заказа
+      tags: 
+      - Orders
+      operationId:  closeOrderById
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: string
+          example: 3
+      responses:
+        '200':
+          description: Успешное закрытие заказа
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        '404':
+          description: Ошибка нет такого заказа
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        default:
+          description: Ошибка изменения 
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error" 
+      
+  /reports/{id}:
+    get:
+      summary: Метод получения отчета по идентификатору
+      tags:
+      - Reports
+      operationId: getReportById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор отчета
+          schema:
+            type: string
+          example: 3
+      responses:
+        '200':
+          description: Успешный ответ c номером определнного отчета
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Report"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+  /reports:
+     get:
+      summary: Метод получения списка отчетов
+      tags:
+      - Reports
+      operationId: getAllReports
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
+      parameters: 
+        - name: orderBy
+          in: query
+          required: false
+          description: Идентификатор сортировки
+          schema:
+            type: string
+            enum: 
+             - total_orders
+             - total_cost
+             - created_at
+            example: name
+        - name: sort
+          in: query
+          required: false
+          description: Направление сортировки
+          schema:
+            type: string
+            enum:
+            - asc
+            - desc
+            example: desc
+        - name: total_orders
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: Кашка
+        - name: total_cost
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example:  235
+        - name: created_at
+          in: query
+          required: false
+          description: Параметр для поиска
+          schema:
+            type: integer
+            example: 2023-04-16 11:34:35
+      responses:
+        '200':
+          description: Успешный ответ со списком отчетов
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reports"
+        default:
+          description: Все нестандартное
+          content:
+            application/json:
+              schema:
+               $ref: "#/components/schemas/Error"
+components:
+  schemas:
+     User:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - pin_code
+        - role_id
+      properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: Аркадий
+          email:
+            type: string
+            example: test@yandex.ru
+          pin_code:
+            type: integer
+            example: 1234
+          password:
+            type: string
+            example: gefd2143fwd!
+          role_id:
+            type: integer
+            example: 3
+            enum: 
+             - 1
+             - 2
+             - 3
+            description: 1 - Супер Админ, 2 - Админ, 3 - Официан
+          created_at:
+            type: string
+            example: 2023-04-16 11:34:35
+          updated_at:
+            type: string
+            example: 2023-04-16 11:34:35
+     LoginRegister:
+        type: object
+        properties:
+            role:
+              type: string
+              example: superAdmin
+            access_token:
+              type: string
+              example: 1|j8hVjSx2gyhRHuIjkmEHlM8Rz1voTSL8Y7A5IZUv
+     Users:
+        type: array
+        items:
+          $ref: "#/components/schemas/User"
+     Error:
+        type: object
+        required:
+          - code
+          - message
+        properties:
+          code:
+            type: integer
+            example: 500
+          message:
+            type: string
+            example: Что-то пошло не так
+     UpdateUserRequest:
+      type: object
+      properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: Аркадий
+          email:
+            type: string
+            example: test@yandex.ru
+          pin_code:
+            type: integer
+            example: 1234
+          password:
+            type: string
+            example: gefd2143fwd!
+          role_id:
+            type: integer
+            example: 3
+            enum: 
+             - 1
+             - 2
+             - 3
+            description: 1 - Супер Админ, 2 - Админ, 3 - Официант
+     
+     LoginUser:
+      type: object
+      properties:
+          email:
+            type: string
+            example: test@yandex.ru
+          pin_code:
+            type: integer
+            example: 1234
+          password:
+            type: string
+            example: gefd2143fwd
+     RegisterUser:
+      type: object
+      description: Все поля являются обязательными для заполнения
+      properties:
+          name:
+            type: string
+            example: Аркадий| Все поля обязательны
+          email:
+            type: string
+            example: test@yandex.ru
+          password:
+            type: string
+            example: gefd2143fwd
+          pin_code:
+            type: integer
+            example: 1234
+          role_id:
+            type: integer
+            example: 3
+            enum: 
+             - 1
+             - 2
+             - 3
+            description: 1 - Супер Админ, 2 - Админ, 3 - Официант
+     Category:
+      type: object
+      required:
+        - name
+        - image
+      properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example:  Борщечок))
+          image:
+            type: string
+            example: 5zWjV4D3i9TeXxhB8kE8IJdVZkVFcYo2Vd52CxiS.jpg
+          created_at:
+            type: string
+            example: 2023-04-16 11:34:35
+          updated_at:
+            type: string
+            example: 2023-04-16 11:34:35
+     Categories:
+        type: array
+        items:
+          $ref: "#/components/schemas/Category"
+     UpdateCategoryRequest:
+      type: object
+      properties:
+          name:
+            type: string
+            example: Супец))
+          image:
+            type: string
+            example: 5zWjV4D3i9TeXxhB8kE8IJdVZkVFcYo2Vd52CxiS.jpg
+     Dish:
+      type: object
+      required:
+        - name
+        - image
+        - composition
+        - calories
+        - cost
+        - category_id
+      properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: Бургер
+          image:
+            type: string
+            example: 5zWjV4D3i9TJdVZkVFcYo2Vd52CxiS.jpg
+          composition:
+            type: string
+            example: состав какой-то
+          calories:
+            type: integer
+            example: 563
+          cost:
+            type: integer
+            example: 563
+          category_id:
+            type: integer
+            example: 5
+          created_at:
+            type: string
+            example: 2023-04-16 11:34:35
+          updated_at:
+            type: string
+            example: 2023-04-16 11:34:35
+     Dishes:
+        type: array
+        items:
+          $ref: "#/components/schemas/Dish"
+     UpdateDishesRequest:
+         type: object
+         properties:
+          name:
+            type: string
+            example: умммм... Салатик
+          image:
+            type: string
+            example: 5zWjV4D3i9TJdVZkVFcYo2Vd52CxiS.jpg
+          composition:
+            type: string 
+            example: тут тоже какой-то состав, короче многа букав
+          calories:
+            type: integer
+            example: 563
+          cost:
+            type: integer
+            example: 563
+          category_id:
+            type: integer
+            example: 5
+     Order:
+      type: object
+      required:
+        - number
+        - count
+        - total_cost
+        - date_closed
+        - is_closed
+        - waiter_id
+      properties:
+          id:
+            type: integer
+            example: 1
+          number:
+            type: integer
+            example: 442
+          count:
+            type: integer
+            example: 132
+          total_cost:
+            type: integer
+            example: 12356
+          date_closed:
+            type: string
+            example: 2023-04-16 11:34:35
+          is_closed:
+            type: boolean
+            example: false
+          created_at:
+            type: string
+            example: 2023-04-16 11:34:35
+          updated_at:
+            type: string
+            example: 2023-04-16 11:34:35
+     Orders:
+      type: array
+      items:
+          $ref: "#/components/schemas/Order"
+     UpdateOrderRequest:
+      type: object
+      properties:
+          number:
+            type: integer
+            example: 569
+          count:
+            type: integer
+            example: 11
+          total_cost:
+            type: integer
+            example: 12356
+          date_closed:
+            type: string
+            example: 2023-04-16 11:34:35
+          is_closed:
+            type: boolean
+            example: false
+          created_at:
+            type: string
+            example: 2023-04-16 11:54:35
+          updated_at:
+            type: string
+            example: 2023-04-16 12:34:35
+     AddDishInOrder:
+      type: object
+      description: Обязательное только количество 
+      required:
+        - count
+      properties:
+          count:
+            type: integer
+            description: Количество блюд
+            example: 132
+          date_closed:
+            type: string
+            example: 2023-04-16 11:34:35
+     DelDishInOrder:
+      type: object
+      description: Обязательное только количество 
+      required:
+        - count
+      properties:
+          count:
+            type: integer
+            description: Количество  удаляемых блюд
+            example: 132
+          date_closed:
+            type: string
+            example: 2023-04-16 11:34:35
+    
+     Report:
+      type: object
+      required:
+        - total_cost
+      properties:
+          id:
+            type: integer
+            example: 1
+          total_cost:
+            type: integer
+            example: 1215
+          total_orders:
+            type: integer
+            example: 6
+          created_at:
+            type: string
+            example: 2023-04-16 11:34:35
+          updated_at:
+            type: string
+            example: 2023-04-16 11:34:35klfsgjlk;sd;j32524
+     Reports:
+      type: array
+      items:
+          $ref: "#/components/schemas/Report"
+     Logout:
+      type: object
+      properties:
+          message:
+            type: string
+            example: Вы вышли
+     ForgotPassword:
+      type: object
+      required:
+        - email
+      properties:
+          email:
+            type: string
+            example: dod@300yandex.ru
+     ForgotPasswordSuccess:
+      type: object
+      required:
+        - email
+      properties:
+          message:
+            type: string
+            example: Письмо успешно отправлено
+     ResetPassword:
+      type: object
+      required:
+        - password
+        - password_confirmation
+        - email
+      properties:
+          email:
+            type: string
+            example: ilia@cobaka.ru
+          password:
+            type: integer
+            example: klfsgjlk;sd;j32524
+          password_confirmation:
+            type: integer
+            example: klfsgjlk;sd;j32524
+     Password_confirmation:
+      type: object
+      required:
+        - pin_code
+      properties:
+          pin_code:
+            type: integer
+            example: 123156
+
+
+    
+    
+
+     
+      
+
+
+      
+
+    
+
+    
+    
+            
+  
+          
+      
+          
+      
+    
+          

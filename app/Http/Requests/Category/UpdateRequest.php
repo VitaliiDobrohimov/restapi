@@ -25,7 +25,8 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' =>'string|unique:users',
-            'image'=>'file'
+            'image'=>'file',
+            'url'=> 'string'
         ];
     }
 }

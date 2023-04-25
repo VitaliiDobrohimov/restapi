@@ -10,13 +10,14 @@ use App\Models\Order;
 use App\Http\Controllers\Filters\OrderFilter;
 use App\Models\Report;
 use App\Models\User;
+use App\Policies\ReportPolicy;
 
 
 class IndexController extends Controller
 {
     public function __invoke(IndexRequest $request)
     {
-        $this->authorize('view',auth()->user());
+        $this->authorize('view', ReportPolicy::class);
         $data = $request->validated();
         $filter = app()->make(ReportFilter::class,['queryParams'=>array_filter($data)]);
         $data = Report::filter($filter);

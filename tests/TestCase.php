@@ -16,6 +16,7 @@ abstract class TestCase extends BaseTestCase
         $this->withoutMiddleware(
             ThrottleRequests::class
         );
+
     }
 
 }

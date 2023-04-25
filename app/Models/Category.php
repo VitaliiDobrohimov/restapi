@@ -14,7 +14,8 @@ class Category extends Model
     protected $table = 'categories';
     protected $fillable = [
         'name',
-        'image'
+        'image',
+        'url'
     ];
     public function dishes(): HasMany
     {

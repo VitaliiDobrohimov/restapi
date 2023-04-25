@@ -20,7 +20,8 @@ class UpdateController extends BaseController
         if ($dish)
         {
             if(isset($validator['image'])){
-                $validator['image'] = Storage::put('/DishesImage',$validator['image']);
+                $validator['image'] = Storage::put('/public/DishesImage',$validator['image']);
+                $validator['url'] = 'http://laravel-rest.ru/' . Storage::url($validator['image']);
                 $this->service->update($validator,$dish);
             }
             $dish->update($validator);

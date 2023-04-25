@@ -20,7 +20,8 @@ class Dish extends Model
         'composition',
         'calories',
         'category_id',
-        'cost'
+        'cost',
+        'url'
     ];
 
     /**
