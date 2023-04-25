@@ -21,8 +21,10 @@ class IndexController extends Controller
         $filter = app()->make(OrderFilter::class,['queryParams'=>array_filter($data)]);
         $data = Order::filter($filter);
         if (isset($request['orderBy'])&&isset($request['sort'])){
-
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
+        }
+        elseif(isset($request['orderBy'])){
+            return $data->orderBy($request['orderBy'],'asc')>get();
         }
         if (isset($request['name'])){
 

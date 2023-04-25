@@ -25,6 +25,9 @@ class IndexController extends Controller
         if (isset($request['orderBy'])&&isset($request['sort'])){
             return $data->orderBy($request['orderBy'],$request['sort'])->get();
         }
+        elseif(isset($request['orderBy'])){
+            return $data->orderBy($request['orderBy'],'asc')->get();
+        }
         elseif (isset($request['name'])){
             $data->where('name','like',"%{$request['name']}%")->get();
         }
@@ -36,6 +39,9 @@ class IndexController extends Controller
         }
         elseif (isset($request['cost'])){
             $data->where('calories','like',"%{$request['calories']}%")->get();
+        }
+        elseif (isset($request['category_id'])){
+            $data->where('category_id',$request['category_id'])->get();
         }
         return $data->get();
 

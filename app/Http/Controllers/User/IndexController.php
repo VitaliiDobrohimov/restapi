@@ -31,8 +31,14 @@ class IndexController extends Controller
         elseif (isset($request['orderBy'])&& !isset($request['sort'])){
             return $data->orderBy($request['orderBy'], 'asc')->get();
         }
+        elseif (isset($request['name'])){
+            $data->where('name','like',"%{$request['name']}%")->get();
+        }
+        elseif (isset($request['email'])) {
+            $data->where('email', 'like', "%{$request['email']}%")->get();
+        }
         if ($data)
-            return $data->paginate(10);
+            return $data->get();
         else {
             return response()->json([
                 'status' => 404,

@@ -28,7 +28,7 @@ class IndexController extends Controller
             return $data->orderBy($request['orderBy'], 'asc')->get();
         }
         if ($data)
-            return $data->paginate(10);
+            return $data->get();
         else {
             return response()->json([
                 'status' => 404,

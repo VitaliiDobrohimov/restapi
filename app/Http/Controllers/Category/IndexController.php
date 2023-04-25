@@ -21,20 +21,23 @@ class IndexController extends Controller
         $filter = app()->make(CategoryFilter::class,['queryParams'=>array_filter($data)]);
         $data = Category::filter($filter);
         if (isset($request['orderBy'])&& isset($request['sort'])) {
+
             return $data->orderBy($request['orderBy'], $request['sort'])->get();
         }
-        elseif (isset($request['orderBy'])&& !isset($request['sort'])){
+        elseif (isset($request['orderBy'])){
             return $data->orderBy($request['orderBy'], 'asc')->get();
         }
-        if ($data)
+
+
+        if ($data){
             return $data->get();
+        }
         else {
             return response()->json([
                 'status' => 404,
                 'message' => 'Ошибка'
             ], 404);
         }
-
 
     }
 
