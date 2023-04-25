@@ -22,7 +22,7 @@ class ReportTest extends TestCase
     public function testShow(): void
     {
         $report  = Report::factory()->create();
-        $user = User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
+        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
         $response = $this->actingAs($user)
             ->get("/api/reports/{$report->id}");
         $response->assertStatus(200);
@@ -31,7 +31,7 @@ class ReportTest extends TestCase
     public function testIndexOrderBy(): void
     {
         $report  = Report::factory()->create();
-        $user = User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
+        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
         $response = $this->actingAs($user)
             ->get("/api/reports",
                 ['orderBy'=> $report->total_cost,
@@ -42,7 +42,7 @@ class ReportTest extends TestCase
     public function testIndexFind(): void
     {
         $report  = Report::factory()->create();
-        $user = User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
+        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
         $response = $this->actingAs($user)
             ->get("/api/reports",
                 ['total_orders' => $report->total_orders]);

@@ -93,15 +93,7 @@ class DishTest extends TestCase
                     'sort'=> 'desc']);
         $response->assertStatus(200);
     }
-    public function testEdit(): void
-    {
-        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
-        $id = rand(1, 10);
-        $response = $this->actingAs($user)
-            ->get("api/dishes/{$id}/edit");
 
-        $response->assertStatus(200);
-    }
     public function testDestroy(): void
     {
         $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);

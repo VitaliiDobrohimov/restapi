@@ -17,7 +17,7 @@ class IndexController extends Controller
 {
     public function __invoke(IndexRequest $request)
     {
-        $this->authorize('view', ReportPolicy::class);
+        $this->authorize('view', auth()->user());
         $data = $request->validated();
         $filter = app()->make(ReportFilter::class,['queryParams'=>array_filter($data)]);
         $data = Report::filter($filter);

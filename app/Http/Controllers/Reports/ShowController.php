@@ -16,7 +16,7 @@ use App\Policies\ReportPolicy;
 class ShowController extends Controller
 {
     public function __invoke($id){
-        $this->authorize('view', ReportPolicy::class);
+        $this->authorize('view', auth()->user());
         $report = Report::find($id);
         if ($report){
             return response()->json([

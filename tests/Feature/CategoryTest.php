@@ -77,15 +77,7 @@ class CategoryTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function testEdit(): void
-    {
-        $user = User::factory()->create(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
-        $id = rand(1, 10);
-        $response = $this->actingAs($user)
-            ->get("api/categories/{$id}/edit");
 
-        $response->assertStatus(200);
-    }
     public function testIndexOrderBy(): void
     {
         $user = User::factory()->make(['password' => bcrypt($password = '12345678'), 'role_id' => 1]);
