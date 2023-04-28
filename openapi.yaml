@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Ресторан Rest API Спецификация
   version: 0.0.1
-servers: 
+servers:
   - url: https://laravel-rest.ru/api/
     description: Dev server
 paths:
@@ -12,15 +12,15 @@ paths:
       tags:
       - Users
       operationId: getAllUsers
-      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
-      parameters: 
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров
+      parameters:
         - name: orderBy
           in: query
           required: false
           description: Идентификатор сортировки
           schema:
             type: string
-            enum: 
+            enum:
              - name
              - email
              - role_id
@@ -56,7 +56,7 @@ paths:
           schema:
             type: string
             example: dod300@yandex.ru
-          
+
       responses:
         '200':
           description: Успешный ответ со списком пользователей
@@ -101,7 +101,7 @@ paths:
       tags:
       - Users
       operationId: getUserById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -122,15 +122,15 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-  
-               
+
+
   /users/{id}/update:
     put:
       summary: Метод изменения пользователя
-      tags: 
+      tags:
       - Users
       operationId:  updateUserById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -151,19 +151,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/User"
         default:
-          description: Ошибка изменения 
+          description: Ошибка изменения
           content:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-      
+
   /users/{id}/delete:
     delete:
       summary: Метод удаления пользователя по идентификатору
-      tags: 
+      tags:
         - Users
       operationId: destroyUserToById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -182,11 +182,11 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-              
+
   /login:
     post:
       summary: Авторизация пользователя
-      tags: 
+      tags:
       - Auth
       operationId: loginUser
       description: Пользователь авторизуется либо только по пин-коду, либо почта+пароль
@@ -210,7 +210,7 @@ paths:
           description:  Неправильный пин-код
           content:
             application/json: {}
-        
+
         default:
           description: Ошибка. Неверные данные
           content:
@@ -220,7 +220,7 @@ paths:
   /logout:
     post:
       summary: Авторизация пользователя
-      tags: 
+      tags:
         - Auth
       operationId: logoutUser
       description: Пользователь выходит из системы
@@ -240,7 +240,7 @@ paths:
   /register:
     post:
       summary: Регистрация пользователя
-      tags: 
+      tags:
         - Auth
       operationId: registerUser
       description: Регистрация пользователя в системе
@@ -262,11 +262,11 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-  
+
   /forgot-password:
     post:
       summary: Отправка сообщения на почту с кодом
-      tags: 
+      tags:
         - Auth
       operationId: forgotpassword
       description: Отправка сообщения на почту
@@ -290,11 +290,11 @@ paths:
                $ref: "#/components/schemas/Error"
   /pincode-confirmation:
     post:
-      summary: Проверка пин-кода отпраленнного на почту 
-      tags: 
+      summary: Проверка пин-кода отпраленнного на почту
+      tags:
         - Auth
       operationId: pincodeConformition
-      description: Проверка пин-кода отпраленнного на почту 
+      description: Проверка пин-кода отпраленнного на почту
       requestBody:
         content:
           application/json:
@@ -310,12 +310,12 @@ paths:
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error" 
-              
+               $ref: "#/components/schemas/Error"
+
   /reset-password:
     post:
       summary: Процедура сброса пароля
-      tags: 
+      tags:
         - Auth
       operationId: resetPassword
       description: Ввод нового пароля
@@ -342,9 +342,9 @@ paths:
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error" 
-      
-      
+               $ref: "#/components/schemas/Error"
+
+
   /categories/{id}:
     get:
       summary: Метод получения категории по идентификатору
@@ -372,9 +372,9 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-        
 
-               
+
+
   /categories:
     post:
       summary: Метод создания категории
@@ -405,15 +405,15 @@ paths:
       tags:
       - Category
       operationId: getAllCategory
-      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметрах. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет все категории без фильтров 
-      parameters: 
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметрах. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет все категории без фильтров
+      parameters:
         - name: orderBy
           in: query
           required: false
           description: Идентификатор сортировки
           schema:
             type: string
-            enum: 
+            enum:
              - name
              - image
             example: name
@@ -441,7 +441,7 @@ paths:
           schema:
             type: string
             example: borch.jpg
-          
+
       responses:
         '200':
           description: Успешный ответ со списком категории
@@ -455,14 +455,14 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
- 
+
   /categories/{id}/update:
     put:
       summary: Метод изменения категории
-      tags: 
+      tags:
       - Category
       operationId:  updateCategoryById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -483,20 +483,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/Category"
         default:
-          description: Ошибка изменения 
+          description: Ошибка изменения
           content:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
- 
-              
+
+
   /categories/{id}/delete:
     delete:
       summary: Метод удаления категории по идентификатору
-      tags: 
+      tags:
         - Category
       operationId: destroyCategoryToById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -521,7 +521,7 @@ paths:
       tags:
       - Dishes
       operationId: getDishById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -542,7 +542,7 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-  
+
   /dishes:
     post:
       summary: Метод создания блюда
@@ -572,21 +572,21 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-    
+
     get:
       summary: Метод получения списка блюд
       tags:
       - Dishes
       operationId: getAllDishes
-      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
-      parameters: 
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров
+      parameters:
         - name: orderBy
           in: query
           required: false
           description: Идентификатор сортировки
           schema:
             type: string
-            enum: 
+            enum:
              - name
              - composition
              - calories
@@ -649,15 +649,15 @@ paths:
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error"  
-               
+               $ref: "#/components/schemas/Error"
+
   /dishes/{id}/update:
     put:
       summary: Метод изменения блюда
-      tags: 
+      tags:
       - Dishes
       operationId:  updateDishesById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -678,18 +678,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Dish"
         default:
-          description: Ошибка изменения 
+          description: Ошибка изменения
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error"           
+               $ref: "#/components/schemas/Error"
   /dishes/{id}/delete:
     delete:
       summary: Метод удаления блюда по идентификатору
-      tags: 
+      tags:
         - Dishes
       operationId: destroyDishToById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -714,7 +714,7 @@ paths:
       tags:
       - Orders
       operationId: getOrderById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -747,7 +747,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Order"
+              $ref: "#/components/schemas/Order_post"
       responses:
         '200':
           description: Успешный ответ c созданием заказа
@@ -765,21 +765,21 @@ paths:
             application/json:
               schema:
                $ref: "#/components/schemas/Error"
-    
+
     get:
       summary: Метод получения списка заказа
       tags:
       - Orders
       operationId: getAllOrders
-      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
-      parameters: 
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров
+      parameters:
         - name: orderBy
           in: query
           required: false
           description: Идентификатор сортировки
           schema:
             type: string
-            enum: 
+            enum:
              - number
              - total_cost
              - date_closed
@@ -839,10 +839,10 @@ paths:
   /orders/{id}/update:
     put:
       summary: Метод изменения заказа
-      tags: 
+      tags:
       - Orders
       operationId:  updateOrderById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -863,18 +863,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/Order"
         default:
-          description: Ошибка изменения 
+          description: Ошибка изменения
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error"           
+               $ref: "#/components/schemas/Error"
   /orders/{id}/delete:
     delete:
       summary: Метод удаления заказа по идентификатору
-      tags: 
+      tags:
         - Orders
       operationId: destroyOrderToById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -892,14 +892,14 @@ paths:
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error"    
+               $ref: "#/components/schemas/Error"
   /orders/{dish_id}/{order_id}:
     post:
       summary: Метод добавления блюда в заказ по идентификатору
-      tags: 
+      tags:
         - Orders
       operationId: addDishInOrderById
-      parameters: 
+      parameters:
         - name: dish_id
           in: path
           required: true
@@ -933,20 +933,20 @@ paths:
         '502':
           description: Нет заказа под таким номером
           content:
-            application/json: {}    
+            application/json: {}
         default:
           description: Все нестандартное
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error"    
+               $ref: "#/components/schemas/Error"
   /orders/{dish_id}/{order_id}/delete:
     put:
       summary: Метод удаления блюд из заказа по идентификатору
-      tags: 
+      tags:
         - Orders
       operationId: destroyDishInOrderById
-      parameters: 
+      parameters:
         - name: dish_id
           in: path
           required: true
@@ -965,7 +965,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DelDishInOrder"  
+              $ref: "#/components/schemas/DelDishInOrder"
       responses:
         '200':
           description:  Блюдо успешно удалено
@@ -988,20 +988,20 @@ paths:
         '504':
           description:  Введено неверное количество блюд
           content:
-            application/json: {}    
+            application/json: {}
         default:
           description: Все нестандартное
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error"    
+               $ref: "#/components/schemas/Error"
   /orders/{id}/close:
     put:
       summary: Метод закрытия заказа
-      tags: 
+      tags:
       - Orders
       operationId:  closeOrderById
-      parameters: 
+      parameters:
         - name: id
           in: path
           required: true
@@ -1023,12 +1023,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Order"
         default:
-          description: Ошибка изменения 
+          description: Ошибка изменения
           content:
             application/json:
               schema:
-               $ref: "#/components/schemas/Error" 
-      
+               $ref: "#/components/schemas/Error"
+
   /reports/{id}:
     get:
       summary: Метод получения отчета по идентификатору
@@ -1062,15 +1062,15 @@ paths:
       tags:
       - Reports
       operationId: getAllReports
-      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров 
-      parameters: 
+      description: Параметры OrderBy для сортировки по выбранному столбцу, если sort не задан то сортировка будет по asc, иначе по заданному даннным заданным в параметре. Задавать либо параметры для поиска, либо для сортировки что-то одно. Если оставить параметры пустыми вернет всех пользователей без фильтров
+      parameters:
         - name: orderBy
           in: query
           required: false
           description: Идентификатор сортировки
           schema:
             type: string
-            enum: 
+            enum:
              - total_orders
              - total_cost
              - created_at
@@ -1148,7 +1148,7 @@ components:
           role_id:
             type: integer
             example: 3
-            enum: 
+            enum:
              - 1
              - 2
              - 3
@@ -1205,12 +1205,12 @@ components:
           role_id:
             type: integer
             example: 3
-            enum: 
+            enum:
              - 1
              - 2
              - 3
             description: 1 - Супер Админ, 2 - Админ, 3 - Официант
-     
+
      LoginUser:
       type: object
       properties:
@@ -1242,7 +1242,7 @@ components:
           role_id:
             type: integer
             example: 3
-            enum: 
+            enum:
              - 1
              - 2
              - 3
@@ -1332,7 +1332,7 @@ components:
             type: string
             example: 5zWjV4D3i9TJdVZkVFcYo2Vd52CxiS.jpg
           composition:
-            type: string 
+            type: string
             example: тут тоже какой-то состав, короче многа букав
           calories:
             type: integer
@@ -1377,6 +1377,14 @@ components:
           updated_at:
             type: string
             example: 2023-04-16 11:34:35
+     Order_post:
+        type: object
+        required:
+          - waiter_id
+        properties:
+          waiter_id:
+            type: integer
+            example: 3
      Orders:
       type: array
       items:
@@ -1407,7 +1415,7 @@ components:
             example: 2023-04-16 12:34:35
      AddDishInOrder:
       type: object
-      description: Обязательное только количество 
+      description: Обязательное только количество
       required:
         - count
       properties:
@@ -1420,7 +1428,7 @@ components:
             example: 2023-04-16 11:34:35
      DelDishInOrder:
       type: object
-      description: Обязательное только количество 
+      description: Обязательное только количество
       required:
         - count
       properties:
@@ -1431,7 +1439,7 @@ components:
           date_closed:
             type: string
             example: 2023-04-16 11:34:35
-    
+
      Report:
       type: object
       required:
@@ -1504,24 +1512,23 @@ components:
             example: 123156
 
 
-    
-    
-
-     
-      
 
 
-      
 
-    
 
-    
-    
-            
-  
-          
-      
-          
-      
-    
-          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

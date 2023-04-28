@@ -23,8 +23,7 @@ class OrderTest extends TestCase
         $order = Order::factory()->make();
         $response = $this->actingAs($user)
             ->post('api/orders',
-                ['number' => $order->number,
-                    'waiter_id' => $order->waiter_id]);
+                ['waiter_id' => $order->waiter_id]);
 
         $response->assertStatus(200);
     }
@@ -36,8 +35,7 @@ class OrderTest extends TestCase
         $id = rand(1, 10);
         $response = $this->actingAs($user)
             ->put("/api/orders/{$id}/update",
-                ['number' => $order->number,
-                    'waiter_id' => $order->waiter_id,
+                ['waiter_id' => $order->waiter_id,
                     'is_closed' => $order->is_closed,]);
         $response->assertStatus(200);
     }

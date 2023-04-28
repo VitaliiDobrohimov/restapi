@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-                'number' =>'required|max:191|unique:orders',
+                //'number' =>'required|max:191|unique:orders',
                 'date_closed' => 'date',
                 'waiter_id'=>'required|numeric'
         ];

@@ -15,7 +15,7 @@ class  Order extends Model
     use Filterable;
     protected $table = 'orders';
     protected $fillable = [
-        'number',
+        'num',
         'count',
         'total_cost',
         'date_closed',
@@ -30,5 +30,9 @@ class  Order extends Model
     {
         return $this->belongsToMany(Dish::class,'list_of_dishes','orders_id','dishes_id')
             ->withPivot('count');
+    }
+    public function get_order_number()
+    {
+        return '#' . str_pad($this->id, 8, "0", STR_PAD_LEFT);
     }
 }

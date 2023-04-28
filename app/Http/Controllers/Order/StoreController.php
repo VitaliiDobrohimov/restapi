@@ -18,9 +18,11 @@ class StoreController extends Controller
         $validator = $request->validated();
         $order = Order::create($validator);
         if ($order){
+            $order->update(["num" => $order->get_order_number()]);
             return response()->json([
                 'status' => 200,
-                'message' => "Заказ успешно создан"
+                'message' => "Заказ успешно создан",
+                'data'=>$order,
             ],200);
         }else{
             return response()->json([

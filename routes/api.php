@@ -73,7 +73,6 @@ Route::group(['middleware'=> ['auth:sanctum']], function ()
         Route::get('/reports/{id}', 'ShowController');
         Route::get('/reports', 'IndexController');
     });
-
 });
 
 Route::post('/forgot-password',[AuthController::class,'forgotPassword']);

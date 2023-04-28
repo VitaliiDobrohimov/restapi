@@ -19,7 +19,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'number' => fake()->unique()->numberBetween(1,1000),
+            'num' => fake()->unique()->numberBetween(1,1000),
             'count' => 0,
             'total_cost' => 0,
             'date_closed' => fake()->dateTime(),

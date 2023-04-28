@@ -33,8 +33,8 @@ class IndexController extends Controller
                     'like',
                  "%{$request['name']}%")->first()->id)->get();
         }
-        elseif (isset($request['number'])){
-           $data->where('number','like',"%{$request['number']}%")->get();
+        elseif (isset($request['num'])){
+           $data->where('num','like',"%{$request['num']}%")->get();
         }
         if (isset($request['total_cost'])){
 
@@ -43,7 +43,7 @@ class IndexController extends Controller
         elseif (isset($request['date_closed'])){
             $data->where('date_closed','like',"%{$request['date_closed']}%")->get();
         }
-        return $data->paginate(10);
+        return $data->get();
 
     }
 }

@@ -19,7 +19,7 @@ class StoreController extends BaseController
         $validator = $request->validated();
         $validator['image'] = Storage::put('/public/DishesImage',$validator['image']);
         $validator['url'] = 'http://laravel-rest.ru/' . Storage::url($validator['image']);
-      //  $this->service->store($validator);
+        //$this->service->store($validator)
         $dish = Dish::create($validator);
         if ($dish){
             return response()->json([
@@ -33,7 +33,4 @@ class StoreController extends BaseController
             ],501);
         }
     }
-
-
-
 }
